@@ -18,6 +18,21 @@ final class iOSAppModel: ObservableObject {
     private lazy var bluetoothAdvertiser = iOSBluetoothAdvertiser(payload: bluetoothPayload())
     private lazy var watchRelay = iOSWatchRelay()
 
+    var pairingCodeDigits: [String] {
+        let digits = Array(pairingCode)
+        return (0..<PairingCodeValidator.requiredLength).map { index in
+            index < digits.count ? String(digits[index]) : ""
+        }
+    }
+
+    var canConfirmPairing: Bool {
+        PairingCodeValidator.normalized(pairingCode) != nil
+    }
+
+    var isEnabled: Bool {
+        isPairingCodeConfirmed
+    }
+
     func start() {
         bluetoothAdvertiser.onStatus = { [weak self] status in
             Task { @MainActor in
@@ -41,13 +56,13 @@ final class iOSAppModel: ObservableObject {
     }
 
     func updatePairingCode(_ code: String) {
-        pairingCode = code.filter(\.isNumber).prefix(6).description
+        pairingCode = PairingCodeValidator.digitsOnlyPrefix(code)
         isPairingCodeConfirmed = false
         refreshBluetoothPayload()
     }
 
     func confirmPairing() {
-        guard pairingCode.count == 6 else { return }
+        guard PairingCodeValidator.normalized(pairingCode) != nil else { return }
         isPairingCodeConfirmed = true
         refreshBluetoothPayload()
     }
@@ -61,11 +76,12 @@ final class iOSAppModel: ObservableObject {
 
     private func bluetoothPayload() -> BluetoothIdentityPayload {
         let trimmedPairingCode = pairingCode.trimmingCharacters(in: .whitespacesAndNewlines)
+        let normalizedPairingCode = PairingCodeValidator.normalized(trimmedPairingCode)
         return BluetoothIdentityPayload(
             deviceId: deviceId,
             deviceName: broadcastName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? UIDevice.current.name : broadcastName,
             role: .iphone,
-            pairingCode: isPairingCodeConfirmed && trimmedPairingCode.count == 6 ? trimmedPairingCode : nil,
+            pairingCode: isPairingCodeConfirmed ? normalizedPairingCode : nil,
             lockRequestId: lastLockRequestId
         )
     }
