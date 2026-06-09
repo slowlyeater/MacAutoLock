@@ -84,3 +84,43 @@ func autoLockIgnoresUntrustedPeers() {
 
     #expect(decision.shouldLock == false)
 }
+
+@Test
+func autoLockStaysUnlockedForSmoothedNearbyRSSI() {
+    let engine = AutoLockEngine()
+    let now = Date(timeIntervalSince1970: 100)
+    let rule = AutoLockRule(offlineGraceSeconds: 45, minimumNearbyRSSI: -78)
+    let peer = PeerState(
+        deviceName: "Eric iPhone",
+        role: .iphone,
+        lastHeartbeat: now,
+        lastNearbyHeartbeat: now,
+        lastRSSI: -72,
+        isConnected: true,
+        isTrusted: true
+    )
+
+    let decision = engine.evaluate(rule: rule, trustedPeers: [peer], now: now)
+
+    #expect(decision.shouldLock == false)
+}
+
+@Test
+func autoLockLocksForSmoothedWeakRSSI() {
+    let engine = AutoLockEngine()
+    let now = Date(timeIntervalSince1970: 100)
+    let rule = AutoLockRule(offlineGraceSeconds: 45, minimumNearbyRSSI: -78)
+    let peer = PeerState(
+        deviceName: "Eric iPhone",
+        role: .iphone,
+        lastHeartbeat: now,
+        lastNearbyHeartbeat: now.addingTimeInterval(-20),
+        lastRSSI: -84,
+        isConnected: false,
+        isTrusted: true
+    )
+
+    let decision = engine.evaluate(rule: rule, trustedPeers: [peer], now: now)
+
+    #expect(decision.shouldLock == true)
+}
