@@ -1,0 +1,845 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0017481EA7BC403BBB00E81E /* MacLockController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999A62D69F5F4D09FDE6B875 /* MacLockController.swift */; };
+		01452A151C9DF2E2FF79D9E5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
+		02DF299C6A28FC7B48A4010B /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
+		0844DC89318E3F7B3637554E /* MacAutoLockMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EB20BCDFBD15C3CAAF0726 /* MacAutoLockMacApp.swift */; };
+		0C2AC8EE83E5372A438F2F8F /* AutoLockEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */; };
+		0D1E0E8D3E447EF9FB9BB438 /* MacAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB545C5C84B79C896A3DE842 /* MacAppModel.swift */; };
+		11ED20F10549AC7EECC4E9D8 /* iOSWatchRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5DF04E5171F899E093DE49 /* iOSWatchRelay.swift */; };
+		121E4EFE4A10B3ECDCAE9D9C /* AutoLockEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */; };
+		1A9D1CC1EA47EDAC30EF565B /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		1AA684458C57396FA7F2B365 /* AutoLockEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */; };
+		20A86C88400B7E46A1C7D5FD /* AutoLockEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */; };
+		20B42BB24EE47C9A4F59A9F4 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
+		277ADC2E72E9EC5FA3EA2B47 /* iOSBluetoothAdvertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D82B7254D5E445DD964537 /* iOSBluetoothAdvertiser.swift */; };
+		2A9F7365DE4867429C11567E /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		45EEF8E5AA3492BA07A78CC3 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
+		47C4A2DE0C87D338A8C2269A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
+		47EF770FE3A5E1D1693EF74A /* MacAutoLockWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD16422F837B5DD73D286C9 /* MacAutoLockWatchApp.swift */; };
+		505C606E21056D52F88A89D3 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
+		5E4DA3C977EFE4C168235B97 /* WatchAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F690DC0602053F39D83F53 /* WatchAppModel.swift */; };
+		61C6196D467036C665C9FD41 /* iOSContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA6036CC8C6D64D4D94B421 /* iOSContentView.swift */; };
+		665B31F8A0F6128D04FB52FF /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
+		670C7F7CFBB93C9D57C47FA2 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
+		6A42CF74FAF2C9A71691F594 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A8EB6EF35A26A2D25ECC1E /* WatchContentView.swift */; };
+		79CC8E2C3680156B19EF4E65 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
+		891BFA487EFD78948D177858 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
+		9276D25E730560AA97652F33 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
+		95C6D5F0BCE684A8559E7683 /* TrustedDeviceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C1734D13B8CF7D5153ADE8 /* TrustedDeviceStore.swift */; };
+		A31552435929B87150249606 /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		A9F284DF4F4964DDAB7183A0 /* MacAutoLockiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3D11BAADC7240C0EFF4D02 /* MacAutoLockiOSApp.swift */; };
+		AB1719FC56EF4038DB409AA2 /* MacBluetoothPresenceScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE5B413DD9C3BD77F80D9BB /* MacBluetoothPresenceScanner.swift */; };
+		B90CCB3ACA102D91AAA95530 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FE60BF6B59EFB3A8DD6269F /* Assets.xcassets */; };
+		BBD116A4F2592FA96A6AF084 /* MacMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224D06112F84FD9F414909EE /* MacMenuView.swift */; };
+		BE5054D9BDB1EB7AA1551C6A /* DeviceIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C399AA676533E1CAD6EFDE6 /* DeviceIdentity.swift */; };
+		BF76E41FCB3AB9B98B207BB3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
+		C025310EF91C5BA1F2D1C5E3 /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		C0C8B793236007158E17BA79 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
+		CB4AE08CFAE4B49637B4835D /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
+		CB7F307F86C50196C7560CC3 /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		CE4E1DF553D705A2A373FC24 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
+		D570800D7A38751134814B2C /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
+		E07743DAE3817271DEB12F97 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
+		EE6F50E7E243252CDDF5B1C9 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
+		F0412930AA2F5B3D9D5B6B80 /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		F2354638535BA57CEAF58403 /* iOSAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8317EE9B86D41B3559F375B /* iOSAppModel.swift */; };
+		F40AA0E66ACF9543F133E996 /* AutoLockEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */; };
+		F5ED39C194ADBFE0259E053D /* DeviceIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F7EB90271E6E8DA696A93 /* DeviceIdentity.swift */; };
+		FCCD3FFFC4B323374226827F /* AutoLockEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		01EB20BCDFBD15C3CAAF0726 /* MacAutoLockMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAutoLockMacApp.swift; sourceTree = "<group>"; };
+		09B0CCC7EF015042752B4A2F /* MacAutoLockiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacAutoLockiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FE60BF6B59EFB3A8DD6269F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		224D06112F84FD9F414909EE /* MacMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMenuView.swift; sourceTree = "<group>"; };
+		24A8EB6EF35A26A2D25ECC1E /* WatchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchContentView.swift; sourceTree = "<group>"; };
+		28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockEngine.swift; sourceTree = "<group>"; };
+		2C399AA676533E1CAD6EFDE6 /* DeviceIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentity.swift; sourceTree = "<group>"; };
+		30A04E8F11CE596117F3F907 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		36324D0FFD975F443D18B19A /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MacAutoLockShared.framework; path = MacAutoLockSharedWatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		372FED640359EC1A0A03286C /* CommandCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCodec.swift; sourceTree = "<group>"; };
+		3D9AA5D6282BC6E0B3A429B3 /* Mac AutoLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Mac AutoLock.app"; path = MacAutoLockMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA6036CC8C6D64D4D94B421 /* iOSContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSContentView.swift; sourceTree = "<group>"; };
+		5098B13C5DBD068BF0D8E87F /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MacAutoLockShared.framework; path = MacAutoLockSharediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		71C1734D13B8CF7D5153ADE8 /* TrustedDeviceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustedDeviceStore.swift; sourceTree = "<group>"; };
+		8F5DF04E5171F899E093DE49 /* iOSWatchRelay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSWatchRelay.swift; sourceTree = "<group>"; };
+		90D82B7254D5E445DD964537 /* iOSBluetoothAdvertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSBluetoothAdvertiser.swift; sourceTree = "<group>"; };
+		97E40E670EB9ACB71DAC6DD4 /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MacAutoLockShared.framework; path = MacAutoLockSharedMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		999A62D69F5F4D09FDE6B875 /* MacLockController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLockController.swift; sourceTree = "<group>"; };
+		9BE5B413DD9C3BD77F80D9BB /* MacBluetoothPresenceScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBluetoothPresenceScanner.swift; sourceTree = "<group>"; };
+		B82F7EB90271E6E8DA696A93 /* DeviceIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentity.swift; sourceTree = "<group>"; };
+		BC3D11BAADC7240C0EFF4D02 /* MacAutoLockiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAutoLockiOSApp.swift; sourceTree = "<group>"; };
+		C1F690DC0602053F39D83F53 /* WatchAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAppModel.swift; sourceTree = "<group>"; };
+		C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothPresence.swift; sourceTree = "<group>"; };
+		CAD16422F837B5DD73D286C9 /* MacAutoLockWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAutoLockWatchApp.swift; sourceTree = "<group>"; };
+		DB545C5C84B79C896A3DE842 /* MacAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppModel.swift; sourceTree = "<group>"; };
+		E4B13BFFA5F311F39A398176 /* ControlCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCommand.swift; sourceTree = "<group>"; };
+		E8317EE9B86D41B3559F375B /* iOSAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSAppModel.swift; sourceTree = "<group>"; };
+		FFE2C6AF554AF55CA1B2326D /* Mac AutoLock Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Mac AutoLock Watch.app"; path = MacAutoLockWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		42AAA56C94E9FD686465067C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FFE2C6AF554AF55CA1B2326D /* Mac AutoLock Watch.app */,
+				3D9AA5D6282BC6E0B3A429B3 /* Mac AutoLock.app */,
+				09B0CCC7EF015042752B4A2F /* MacAutoLockiOS.app */,
+				97E40E670EB9ACB71DAC6DD4 /* MacAutoLockShared.framework */,
+				36324D0FFD975F443D18B19A /* MacAutoLockShared.framework */,
+				5098B13C5DBD068BF0D8E87F /* MacAutoLockShared.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A0628F17D1B6E013F99F161C = {
+			isa = PBXGroup;
+			children = (
+				EA82FEC736763D190353D729 /* MacAutoLockiOS */,
+				FA05365ED0B193C2C1903E5F /* MacAutoLockMac */,
+				B7C8C9F8D18D383CF2E299F9 /* MacAutoLockShared */,
+				BF704C2ADEE86F98D3979107 /* MacAutoLockWatch */,
+				42AAA56C94E9FD686465067C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B7C8C9F8D18D383CF2E299F9 /* MacAutoLockShared */ = {
+			isa = PBXGroup;
+			children = (
+				28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */,
+				C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */,
+				372FED640359EC1A0A03286C /* CommandCodec.swift */,
+				E4B13BFFA5F311F39A398176 /* ControlCommand.swift */,
+				30A04E8F11CE596117F3F907 /* Models.swift */,
+			);
+			name = MacAutoLockShared;
+			path = Sources/MacAutoLockShared;
+			sourceTree = "<group>";
+		};
+		BF704C2ADEE86F98D3979107 /* MacAutoLockWatch */ = {
+			isa = PBXGroup;
+			children = (
+				CAD16422F837B5DD73D286C9 /* MacAutoLockWatchApp.swift */,
+				C1F690DC0602053F39D83F53 /* WatchAppModel.swift */,
+				24A8EB6EF35A26A2D25ECC1E /* WatchContentView.swift */,
+			);
+			name = MacAutoLockWatch;
+			path = Apps/MacAutoLockWatch;
+			sourceTree = "<group>";
+		};
+		EA82FEC736763D190353D729 /* MacAutoLockiOS */ = {
+			isa = PBXGroup;
+			children = (
+				1FE60BF6B59EFB3A8DD6269F /* Assets.xcassets */,
+				2C399AA676533E1CAD6EFDE6 /* DeviceIdentity.swift */,
+				E8317EE9B86D41B3559F375B /* iOSAppModel.swift */,
+				90D82B7254D5E445DD964537 /* iOSBluetoothAdvertiser.swift */,
+				4CA6036CC8C6D64D4D94B421 /* iOSContentView.swift */,
+				8F5DF04E5171F899E093DE49 /* iOSWatchRelay.swift */,
+				BC3D11BAADC7240C0EFF4D02 /* MacAutoLockiOSApp.swift */,
+			);
+			name = MacAutoLockiOS;
+			path = Apps/MacAutoLockiOS;
+			sourceTree = "<group>";
+		};
+		FA05365ED0B193C2C1903E5F /* MacAutoLockMac */ = {
+			isa = PBXGroup;
+			children = (
+				B82F7EB90271E6E8DA696A93 /* DeviceIdentity.swift */,
+				DB545C5C84B79C896A3DE842 /* MacAppModel.swift */,
+				01EB20BCDFBD15C3CAAF0726 /* MacAutoLockMacApp.swift */,
+				9BE5B413DD9C3BD77F80D9BB /* MacBluetoothPresenceScanner.swift */,
+				999A62D69F5F4D09FDE6B875 /* MacLockController.swift */,
+				224D06112F84FD9F414909EE /* MacMenuView.swift */,
+				71C1734D13B8CF7D5153ADE8 /* TrustedDeviceStore.swift */,
+			);
+			name = MacAutoLockMac;
+			path = Apps/MacAutoLockMac;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		47284397A6DC713620BE467B /* MacAutoLockSharedWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D92A2D47B1CBC12F887C10F5 /* Build configuration list for PBXNativeTarget "MacAutoLockSharedWatch" */;
+			buildPhases = (
+				6417C5E3F0B4BCC9810CF620 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacAutoLockSharedWatch;
+			packageProductDependencies = (
+			);
+			productName = MacAutoLockSharedWatch;
+			productReference = 36324D0FFD975F443D18B19A /* MacAutoLockShared.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		59A7DE190F5D8E4BFC55BD6C /* MacAutoLockSharedMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77755676BDA4385C3390852C /* Build configuration list for PBXNativeTarget "MacAutoLockSharedMac" */;
+			buildPhases = (
+				C7210E2BE496DB9A53B0A0CA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacAutoLockSharedMac;
+			packageProductDependencies = (
+			);
+			productName = MacAutoLockSharedMac;
+			productReference = 97E40E670EB9ACB71DAC6DD4 /* MacAutoLockShared.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		6E73DD20CCE562EFE9F16D7F /* MacAutoLockSharediOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 404EDE1F4DA06594ECA9ED4D /* Build configuration list for PBXNativeTarget "MacAutoLockSharediOS" */;
+			buildPhases = (
+				3D2CA682CA45EB4FCA336D67 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacAutoLockSharediOS;
+			packageProductDependencies = (
+			);
+			productName = MacAutoLockSharediOS;
+			productReference = 5098B13C5DBD068BF0D8E87F /* MacAutoLockShared.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7312B2E13C9F38F5F775DD24 /* MacAutoLockiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 769E2F5D8978FF352D2C9F05 /* Build configuration list for PBXNativeTarget "MacAutoLockiOS" */;
+			buildPhases = (
+				10E066B60F72FAAD6D1EEE23 /* Sources */,
+				6F87B033D089A9AF455B7877 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacAutoLockiOS;
+			packageProductDependencies = (
+			);
+			productName = MacAutoLockiOS;
+			productReference = 09B0CCC7EF015042752B4A2F /* MacAutoLockiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AEA70031E806F22FC2E25D7D /* MacAutoLockWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7B2813DCD2F0C2AF3C074A1 /* Build configuration list for PBXNativeTarget "MacAutoLockWatch" */;
+			buildPhases = (
+				B0EB69761BD971F737F91B58 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacAutoLockWatch;
+			packageProductDependencies = (
+			);
+			productName = MacAutoLockWatch;
+			productReference = FFE2C6AF554AF55CA1B2326D /* Mac AutoLock Watch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FB7AD5D9A8B9FDFEDF1B3530 /* MacAutoLockMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A4D434976A22FC84A5513527 /* Build configuration list for PBXNativeTarget "MacAutoLockMac" */;
+			buildPhases = (
+				CB6D53608E421F153615E221 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacAutoLockMac;
+			packageProductDependencies = (
+			);
+			productName = MacAutoLockMac;
+			productReference = 3D9AA5D6282BC6E0B3A429B3 /* Mac AutoLock.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1947F6E126D325236C3E3B29 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					47284397A6DC713620BE467B = {
+						ProvisioningStyle = Automatic;
+					};
+					59A7DE190F5D8E4BFC55BD6C = {
+						ProvisioningStyle = Automatic;
+					};
+					6E73DD20CCE562EFE9F16D7F = {
+						ProvisioningStyle = Automatic;
+					};
+					7312B2E13C9F38F5F775DD24 = {
+						ProvisioningStyle = Automatic;
+					};
+					AEA70031E806F22FC2E25D7D = {
+						ProvisioningStyle = Automatic;
+					};
+					FB7AD5D9A8B9FDFEDF1B3530 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = E81EB28F0F87C2F22D0E472C /* Build configuration list for PBXProject "MacAutoLock" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A0628F17D1B6E013F99F161C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 42AAA56C94E9FD686465067C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FB7AD5D9A8B9FDFEDF1B3530 /* MacAutoLockMac */,
+				59A7DE190F5D8E4BFC55BD6C /* MacAutoLockSharedMac */,
+				47284397A6DC713620BE467B /* MacAutoLockSharedWatch */,
+				6E73DD20CCE562EFE9F16D7F /* MacAutoLockSharediOS */,
+				AEA70031E806F22FC2E25D7D /* MacAutoLockWatch */,
+				7312B2E13C9F38F5F775DD24 /* MacAutoLockiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6F87B033D089A9AF455B7877 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B90CCB3ACA102D91AAA95530 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		10E066B60F72FAAD6D1EEE23 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C2AC8EE83E5372A438F2F8F /* AutoLockEngine.swift in Sources */,
+				891BFA487EFD78948D177858 /* BluetoothPresence.swift in Sources */,
+				A31552435929B87150249606 /* CommandCodec.swift in Sources */,
+				02DF299C6A28FC7B48A4010B /* ControlCommand.swift in Sources */,
+				BE5054D9BDB1EB7AA1551C6A /* DeviceIdentity.swift in Sources */,
+				A9F284DF4F4964DDAB7183A0 /* MacAutoLockiOSApp.swift in Sources */,
+				665B31F8A0F6128D04FB52FF /* Models.swift in Sources */,
+				F2354638535BA57CEAF58403 /* iOSAppModel.swift in Sources */,
+				277ADC2E72E9EC5FA3EA2B47 /* iOSBluetoothAdvertiser.swift in Sources */,
+				61C6196D467036C665C9FD41 /* iOSContentView.swift in Sources */,
+				11ED20F10549AC7EECC4E9D8 /* iOSWatchRelay.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D2CA682CA45EB4FCA336D67 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCCD3FFFC4B323374226827F /* AutoLockEngine.swift in Sources */,
+				CB4AE08CFAE4B49637B4835D /* BluetoothPresence.swift in Sources */,
+				2A9F7365DE4867429C11567E /* CommandCodec.swift in Sources */,
+				670C7F7CFBB93C9D57C47FA2 /* ControlCommand.swift in Sources */,
+				D570800D7A38751134814B2C /* Models.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6417C5E3F0B4BCC9810CF620 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AA684458C57396FA7F2B365 /* AutoLockEngine.swift in Sources */,
+				E07743DAE3817271DEB12F97 /* BluetoothPresence.swift in Sources */,
+				F0412930AA2F5B3D9D5B6B80 /* CommandCodec.swift in Sources */,
+				505C606E21056D52F88A89D3 /* ControlCommand.swift in Sources */,
+				01452A151C9DF2E2FF79D9E5 /* Models.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0EB69761BD971F737F91B58 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20A86C88400B7E46A1C7D5FD /* AutoLockEngine.swift in Sources */,
+				C0C8B793236007158E17BA79 /* BluetoothPresence.swift in Sources */,
+				C025310EF91C5BA1F2D1C5E3 /* CommandCodec.swift in Sources */,
+				79CC8E2C3680156B19EF4E65 /* ControlCommand.swift in Sources */,
+				47EF770FE3A5E1D1693EF74A /* MacAutoLockWatchApp.swift in Sources */,
+				47C4A2DE0C87D338A8C2269A /* Models.swift in Sources */,
+				5E4DA3C977EFE4C168235B97 /* WatchAppModel.swift in Sources */,
+				6A42CF74FAF2C9A71691F594 /* WatchContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7210E2BE496DB9A53B0A0CA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				121E4EFE4A10B3ECDCAE9D9C /* AutoLockEngine.swift in Sources */,
+				9276D25E730560AA97652F33 /* BluetoothPresence.swift in Sources */,
+				CB7F307F86C50196C7560CC3 /* CommandCodec.swift in Sources */,
+				45EEF8E5AA3492BA07A78CC3 /* ControlCommand.swift in Sources */,
+				BF76E41FCB3AB9B98B207BB3 /* Models.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB6D53608E421F153615E221 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F40AA0E66ACF9543F133E996 /* AutoLockEngine.swift in Sources */,
+				20B42BB24EE47C9A4F59A9F4 /* BluetoothPresence.swift in Sources */,
+				1A9D1CC1EA47EDAC30EF565B /* CommandCodec.swift in Sources */,
+				CE4E1DF553D705A2A373FC24 /* ControlCommand.swift in Sources */,
+				F5ED39C194ADBFE0259E053D /* DeviceIdentity.swift in Sources */,
+				0D1E0E8D3E447EF9FB9BB438 /* MacAppModel.swift in Sources */,
+				0844DC89318E3F7B3637554E /* MacAutoLockMacApp.swift in Sources */,
+				AB1719FC56EF4038DB409AA2 /* MacBluetoothPresenceScanner.swift in Sources */,
+				0017481EA7BC403BBB00E81E /* MacLockController.swift in Sources */,
+				BBD116A4F2592FA96A6AF084 /* MacMenuView.swift in Sources */,
+				EE6F50E7E243252CDDF5B1C9 /* Models.swift in Sources */,
+				95C6D5F0BCE684A8559E7683 /* TrustedDeviceStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		092F77F6625EF2E76AE20843 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLockSharediOS;
+				PRODUCT_MODULE_NAME = MacAutoLockShared;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		552409A437A267298CD61E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLockSharedMac;
+				PRODUCT_MODULE_NAME = MacAutoLockShared;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		5A9A8EDEBEEE9E0384237EC5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLockSharedWatch;
+				PRODUCT_MODULE_NAME = MacAutoLockShared;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		603B82F811228969D2301409 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Config/MacAutoLockMac-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLock.mac;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6C4C1D35E2B91EC7229B3877 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLockSharedWatch;
+				PRODUCT_MODULE_NAME = MacAutoLockShared;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		6F3FFD9EABD3A2A756AB02CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		77D93C37E4059EFC17D4EFD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				INFOPLIST_FILE = "Config/MacAutoLockWatch-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLock.watch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		80C5DE5AB6540C59796C4755 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5F4857X59F;
+				INFOPLIST_FILE = "Config/MacAutoLockiOS-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLock.ios;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		83BBA74D1F972D87596A3E3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				INFOPLIST_FILE = "Config/MacAutoLockWatch-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLock.watch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		A58F2BCD24C8611ECD51B822 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLockSharediOS;
+				PRODUCT_MODULE_NAME = MacAutoLockShared;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		B2390B7CAA1039CD7280A3C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Config/MacAutoLockMac-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLock.mac;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E1013D093EC929C029D5E8A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLockSharedMac;
+				PRODUCT_MODULE_NAME = MacAutoLockShared;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F1B8EA37721E4B3FEF9D344D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		FC45C00BBA46A1A5D3D6C2DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5F4857X59F;
+				INFOPLIST_FILE = "Config/MacAutoLockiOS-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MacAutoLock.ios;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		404EDE1F4DA06594ECA9ED4D /* Build configuration list for PBXNativeTarget "MacAutoLockSharediOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A58F2BCD24C8611ECD51B822 /* Debug */,
+				092F77F6625EF2E76AE20843 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		769E2F5D8978FF352D2C9F05 /* Build configuration list for PBXNativeTarget "MacAutoLockiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC45C00BBA46A1A5D3D6C2DF /* Debug */,
+				80C5DE5AB6540C59796C4755 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		77755676BDA4385C3390852C /* Build configuration list for PBXNativeTarget "MacAutoLockSharedMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1013D093EC929C029D5E8A4 /* Debug */,
+				552409A437A267298CD61E48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A4D434976A22FC84A5513527 /* Build configuration list for PBXNativeTarget "MacAutoLockMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				603B82F811228969D2301409 /* Debug */,
+				B2390B7CAA1039CD7280A3C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C7B2813DCD2F0C2AF3C074A1 /* Build configuration list for PBXNativeTarget "MacAutoLockWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83BBA74D1F972D87596A3E3A /* Debug */,
+				77D93C37E4059EFC17D4EFD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D92A2D47B1CBC12F887C10F5 /* Build configuration list for PBXNativeTarget "MacAutoLockSharedWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A9A8EDEBEEE9E0384237EC5 /* Debug */,
+				6C4C1D35E2B91EC7229B3877 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E81EB28F0F87C2F22D0E472C /* Build configuration list for PBXProject "MacAutoLock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1B8EA37721E4B3FEF9D344D /* Debug */,
+				6F3FFD9EABD3A2A756AB02CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1947F6E126D325236C3E3B29 /* Project object */;
+}

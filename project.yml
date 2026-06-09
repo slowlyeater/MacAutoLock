@@ -1,0 +1,103 @@
+name: MacAutoLock
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    macOS: "14.0"
+    iOS: "17.0"
+    watchOS: "10.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+targets:
+  MacAutoLockSharedMac:
+    type: framework
+    platform: macOS
+    productName: MacAutoLockShared
+    sources:
+      - Sources/MacAutoLockShared
+    settings:
+      base:
+        PRODUCT_MODULE_NAME: MacAutoLockShared
+  MacAutoLockSharediOS:
+    type: framework
+    platform: iOS
+    productName: MacAutoLockShared
+    sources:
+      - Sources/MacAutoLockShared
+    settings:
+      base:
+        PRODUCT_MODULE_NAME: MacAutoLockShared
+  MacAutoLockSharedWatch:
+    type: framework
+    platform: watchOS
+    productName: MacAutoLockShared
+    sources:
+      - Sources/MacAutoLockShared
+    settings:
+      base:
+        PRODUCT_MODULE_NAME: MacAutoLockShared
+  MacAutoLockMac:
+    type: application
+    platform: macOS
+    productName: Mac AutoLock
+    sources:
+      - Apps/MacAutoLockMac
+      - Sources/MacAutoLockShared
+    info:
+      path: Config/MacAutoLockMac-Info.plist
+      properties:
+        LSUIElement: true
+        NSBluetoothAlwaysUsageDescription: Mac AutoLock scans for your paired iPhone over Bluetooth to decide when the Mac should auto-lock.
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.MacAutoLock.mac
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+  MacAutoLockiOS:
+    type: application
+    platform: iOS
+    productName: Mac AutoLock
+    sources:
+      - Apps/MacAutoLockiOS
+      - Sources/MacAutoLockShared
+    info:
+      path: Config/MacAutoLockiOS-Info.plist
+      properties:
+        NSBluetoothAlwaysUsageDescription: Mac AutoLock advertises this iPhone over Bluetooth so your paired Mac can auto-lock when you leave.
+        UIBackgroundModes:
+          - bluetooth-peripheral
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.MacAutoLock.ios
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  MacAutoLockWatch:
+    type: application
+    platform: watchOS
+    productName: Mac AutoLock Watch
+    sources:
+      - Apps/MacAutoLockWatch
+      - Sources/MacAutoLockShared
+    info:
+      path: Config/MacAutoLockWatch-Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.MacAutoLock.watch
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+schemes:
+  MacAutoLockMac:
+    build:
+      targets:
+        MacAutoLockMac: all
+    run:
+      config: Debug
+  MacAutoLockiOS:
+    build:
+      targets:
+        MacAutoLockiOS: all
+  MacAutoLockWatch:
+    build:
+      targets:
+        MacAutoLockWatch: all
