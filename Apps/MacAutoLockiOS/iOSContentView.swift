@@ -22,41 +22,39 @@ struct iOSContentView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 22) {
-                    titleBlock
-                    identityCard
-                    pairingAction
-                    macStatusCard
-                    calibrationCard
+                VStack(alignment: .leading, spacing: 24) {
+                    headerBlock
+                    if model.isEnabled {
+                        enabledCard
+                    } else {
+                        pairingCard
+                    }
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 96)
+                .padding(.horizontal, 24)
+                .padding(.top, 52)
+                .padding(.bottom, 34)
             }
             .background(Color.appBackground.ignoresSafeArea())
             .navigationTitle("")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    settingsMenu
+                    settingsButton
                 }
-            }
-            .safeAreaInset(edge: .bottom) {
-                bottomTabs
             }
             .preferredColorScheme(theme.colorScheme)
         }
     }
 
-    private var settingsMenu: some View {
+    private var settingsButton: some View {
         Button {
             isSettingsPresented.toggle()
         } label: {
             Image(systemName: "gearshape")
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(.primary)
-                .frame(width: 32, height: 32)
+                .frame(width: 44, height: 44)
                 .background(Color.settingsButtonBackground)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
         }
         .sheet(isPresented: $isSettingsPresented) {
             SettingsSheet(
@@ -65,32 +63,34 @@ struct iOSContentView: View {
                 copy: copy
             )
             .preferredColorScheme(theme.colorScheme)
-            .presentationDetents([.height(260)])
+            .presentationDetents([.height(310)])
         }
         .accessibilityLabel(copy.settings)
     }
 
-    private var titleBlock: some View {
-        VStack(alignment: .leading, spacing: 6) {
+    private var headerBlock: some View {
+        VStack(alignment: .leading, spacing: 10) {
             Text(copy.title)
-                .font(.system(size: 28, weight: .bold))
+                .font(.system(size: 34, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
             Text(copy.subtitle)
-                .font(.footnote)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private var identityCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 10) {
+    private var pairingCard: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(spacing: 14) {
                 RoundedIcon(systemName: "iphone", color: .appGreen)
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(copy.broadcastName)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     TextField(copy.broadcastName, text: $model.broadcastName)
-                        .font(.subheadline.weight(.semibold))
+                        .font(.headline.weight(.semibold))
                         .textInputAutocapitalization(.words)
                         .onChange(of: model.broadcastName) { _, _ in
                             model.refreshBluetoothPayload()
@@ -100,112 +100,63 @@ struct iOSContentView: View {
                 StatusPill(text: shortId, color: .appGreen)
             }
 
-            Divider()
-
-            KeyValueRow(label: copy.bluetooth, value: model.bluetoothStatus, valueColor: .appGreen)
-            KeyValueRow(label: copy.codeSource, value: copy.shownOnMac)
-            KeyValueRow(
-                label: copy.trustedMac,
-                value: model.isPairingCodeConfirmed ? copy.waitingForMac : copy.notPaired,
-                valueColor: model.isPairingCodeConfirmed ? .appGreen : .appAmber
-            )
-
-            VStack(alignment: .leading, spacing: 7) {
-                Text(copy.enterCode)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                HStack {
-                    TextField("123456", text: Binding(
+            HStack(spacing: 10) {
+                PairingCodeBoxes(
+                    code: Binding(
                         get: { model.pairingCode },
                         set: { model.updatePairingCode($0) }
-                    ))
-                    .font(.system(size: 18, weight: .bold, design: .monospaced))
-                    .keyboardType(.numberPad)
-                    .textContentType(.oneTimeCode)
+                    ),
+                    digits: model.pairingCodeDigits,
+                    accessibilityLabel: copy.enterCode
+                )
 
-                    Image(systemName: model.isPairingCodeConfirmed ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(model.isPairingCodeConfirmed ? Color.appGreen : Color.secondary)
+                Button(copy.confirmPairing) {
+                    model.confirmPairing()
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .background(Color.cardBackground)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(model.isPairingCodeConfirmed ? Color.appGreen : Color.appBorder, lineWidth: 1)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .buttonStyle(ConfirmButtonStyle())
+                .disabled(!model.canConfirmPairing)
+                .opacity(model.canConfirmPairing ? 1 : 0.45)
+                .frame(width: 88)
             }
-        }
-        .cardStyle()
-    }
 
-    private var pairingAction: some View {
-        Button {
-            model.confirmPairing()
-        } label: {
-            Label(copy.confirmPairing, systemImage: "checkmark")
-                .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(PrimaryButtonStyle())
-        .disabled(model.pairingCode.count != 6)
-        .opacity(model.pairingCode.count == 6 ? 1 : 0.5)
-    }
-
-    private var macStatusCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(copy.macShouldShow)
-            HStack(spacing: 12) {
-                RoundedIcon(systemName: "display", color: .primary)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("\(model.broadcastName.isEmpty ? "iPhone" : model.broadcastName) · \(shortId)")
-                        .font(.subheadline.weight(.semibold))
-                    Text(copy.codeAndIdMustMatch)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                StatusPill(text: copy.check, color: .appAmber)
-            }
-        }
-        .cardStyle()
-    }
-
-    private var calibrationCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(copy.calibration)
-                .font(.headline)
-            Text(copy.calibrationHint)
+            Text(copy.pairingHint)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-
-            HStack(spacing: 8) {
-                SampleChip(text: copy.nearSample)
-                SampleChip(text: copy.doorSample)
-                SampleChip(text: copy.lostSample)
-            }
+                .fixedSize(horizontal: false, vertical: true)
         }
         .cardStyle()
     }
 
-    private var bottomTabs: some View {
-        HStack {
-            HStack(spacing: 6) {
-                TabItem(systemName: "waveform.path.ecg", title: copy.status, isSelected: false)
-                TabItem(systemName: "dot.radiowaves.left.and.right", title: copy.pair, isSelected: true)
-                TabItem(systemName: "gearshape", title: copy.rules, isSelected: false)
+    private var enabledCard: some View {
+        VStack(spacing: 18) {
+            RoundedIcon(systemName: "checkmark.shield.fill", color: .appGreen)
+                .frame(maxWidth: .infinity)
+
+            VStack(spacing: 8) {
+                Text(copy.enabledTitle)
+                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                    .foregroundStyle(.primary)
+                Text(copy.enabledSubtitle)
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(6)
-            .frame(maxWidth: .infinity)
-            .background(.ultraThinMaterial)
-            .overlay {
-                RoundedRectangle(cornerRadius: 28)
-                    .stroke(Color.appBorder, lineWidth: 1)
+
+            HStack(spacing: 10) {
+                Button(copy.testLock) {
+                    model.lockNow()
+                }
+                .buttonStyle(SecondaryButtonStyle())
+
+                Button(copy.rePair) {
+                    model.updatePairingCode("")
+                }
+                .buttonStyle(SecondaryButtonStyle())
             }
-            .clipShape(RoundedRectangle(cornerRadius: 28))
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 10)
-        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .cardStyle()
     }
 
     private var shortId: String {
@@ -238,35 +189,23 @@ private enum ThemePreference: String {
 private struct iOSCopy {
     let language: InterfaceLanguage
 
-    var title: String { language == .chinese ? "配对此 iPhone" : "Pair this iPhone" }
-    var subtitle: String { language == .chinese ? "输入 Mac 上显示的配对码，然后确认。" : "Enter the code shown on your Mac, then confirm." }
-    var broadcastName: String { language == .chinese ? "广播名称" : "Broadcast name" }
-    var bluetooth: String { language == .chinese ? "蓝牙" : "Bluetooth" }
-    var codeSource: String { language == .chinese ? "配对码来源" : "Code source" }
-    var shownOnMac: String { language == .chinese ? "Mac 显示" : "Shown on Mac" }
-    var trustedMac: String { language == .chinese ? "可信 Mac" : "Trusted Mac" }
-    var waitingForMac: String { language == .chinese ? "等待 Mac 信任" : "Waiting for Mac" }
-    var notPaired: String { language == .chinese ? "未配对" : "Not paired" }
+    var title: String { language == .chinese ? "启用自动锁屏" : "Enable Auto-Lock" }
+    var subtitle: String { language == .chinese ? "输入 Mac 上显示的 4 位配对码。完成后后台自动工作。" : "Enter the 4-digit code shown on your Mac. It works quietly after pairing." }
+    var broadcastName: String { language == .chinese ? "本机蓝牙名称" : "Bluetooth name" }
     var enterCode: String { language == .chinese ? "输入配对码" : "Enter pairing code" }
-    var confirmPairing: String { language == .chinese ? "确认配对" : "Confirm Pairing" }
-    var macShouldShow: String { language == .chinese ? "Mac 端应显示" : "Mac should show" }
-    var codeAndIdMustMatch: String { language == .chinese ? "配对码 + ID 必须一致" : "Code + ID must match" }
-    var check: String { language == .chinese ? "核对" : "Check" }
-    var calibration: String { language == .chinese ? "阈值校准" : "Calibration" }
-    var calibrationHint: String { language == .chinese ? "走到离开距离，记录弱信号，再设置 Mac 阈值。" : "Walk away, note weak RSSI, then set the Mac threshold." }
-    var nearSample: String { language == .chinese ? "近 -55" : "Near -55" }
-    var doorSample: String { language == .chinese ? "远 -72" : "Door -72" }
-    var lostSample: String { language == .chinese ? "断开 -91" : "Lost -91" }
+    var pairingHint: String { language == .chinese ? "Mac 菜单栏弹窗会显示这 4 位数字。确认后，这台 iPhone 会作为可信设备广播。" : "The Mac menu bar popover shows these 4 digits. After confirmation, this iPhone advertises as a trusted device." }
+    var confirmPairing: String { language == .chinese ? "确认" : "Confirm" }
+    var enabledTitle: String { language == .chinese ? "已启用" : "Enabled" }
+    var enabledSubtitle: String { language == .chinese ? "配对完成后无需常开 App。Mac 会在距离变远后自动锁屏。" : "You do not need to keep this app open. Your Mac locks when the iPhone moves away." }
+    var testLock: String { language == .chinese ? "测试锁屏" : "Test Lock" }
+    var rePair: String { language == .chinese ? "重新配对" : "Re-pair" }
     var settings: String { language == .chinese ? "设置" : "Settings" }
-    var settingsSubtitle: String { language == .chinese ? "从右上角齿轮打开。" : "Opened from the top-right gear." }
+    var settingsSubtitle: String { language == .chinese ? "维护与外观设置。" : "Maintenance and appearance." }
     var languageTitle: String { language == .chinese ? "语言" : "Language" }
     var appearance: String { language == .chinese ? "外观" : "Appearance" }
     var themeSystem: String { language == .chinese ? "跟随系统" : "System" }
     var themeLight: String { language == .chinese ? "浅色" : "Light" }
     var themeDark: String { language == .chinese ? "深色" : "Dark" }
-    var status: String { language == .chinese ? "状态" : "Status" }
-    var pair: String { language == .chinese ? "配对" : "Pair" }
-    var rules: String { language == .chinese ? "规则" : "Rules" }
 }
 
 private struct SettingsSheet: View {
@@ -275,7 +214,7 @@ private struct SettingsSheet: View {
     var copy: iOSCopy
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 18) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(copy.settings)
@@ -288,9 +227,9 @@ private struct SettingsSheet: View {
                 Image(systemName: "gearshape")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.primary)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 34, height: 34)
                     .background(Color.settingsButtonBackground)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
             }
 
             HStack {
@@ -302,7 +241,7 @@ private struct SettingsSheet: View {
                     Text("EN").tag(InterfaceLanguage.english.rawValue)
                 }
                 .pickerStyle(.segmented)
-                .frame(width: 118)
+                .frame(width: 128)
             }
 
             VStack(alignment: .leading, spacing: 8) {
@@ -316,9 +255,43 @@ private struct SettingsSheet: View {
                 .pickerStyle(.segmented)
             }
         }
-        .padding(20)
+        .padding(22)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.appBackground)
+    }
+}
+
+private struct PairingCodeBoxes: View {
+    @Binding var code: String
+    var digits: [String]
+    var accessibilityLabel: String
+
+    var body: some View {
+        ZStack {
+            HStack(spacing: 8) {
+                ForEach(0..<PairingCodeValidator.requiredLength, id: \.self) { index in
+                    Text(digits[index].isEmpty ? " " : digits[index])
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 52)
+                        .background(Color.cardBackground)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(digits[index].isEmpty ? Color.appBorder : Color.appGreen, lineWidth: 1)
+                        }
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
+            }
+
+            TextField("", text: $code)
+                .keyboardType(.numberPad)
+                .textContentType(.oneTimeCode)
+                .foregroundStyle(.clear)
+                .tint(.clear)
+                .background(Color.clear)
+                .opacity(0.01)
+                .accessibilityLabel(accessibilityLabel)
+        }
     }
 }
 
@@ -328,29 +301,11 @@ private struct RoundedIcon: View {
 
     var body: some View {
         Image(systemName: systemName)
-            .font(.system(size: 18, weight: .semibold))
+            .font(.system(size: 20, weight: .semibold))
             .foregroundStyle(color)
-            .frame(width: 38, height: 38)
+            .frame(width: 54, height: 54)
             .background(color.opacity(0.12))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-private struct KeyValueRow: View {
-    var label: String
-    var value: String
-    var valueColor: Color = .primary
-
-    var body: some View {
-        HStack {
-            Text(label)
-                .foregroundStyle(.secondary)
-            Spacer()
-            Text(value)
-                .foregroundStyle(valueColor)
-                .fontWeight(.medium)
-        }
-        .font(.footnote)
+            .clipShape(RoundedRectangle(cornerRadius: 18))
     }
 }
 
@@ -362,86 +317,51 @@ private struct StatusPill: View {
         HStack(spacing: 6) {
             Circle()
                 .fill(color)
-                .frame(width: 6, height: 6)
+                .frame(width: 7, height: 7)
             Text(text)
-                .font(.caption2.weight(.bold))
+                .font(.caption.weight(.bold))
         }
         .foregroundStyle(color)
-        .padding(.horizontal, 9)
-        .padding(.vertical, 5)
+        .padding(.horizontal, 11)
+        .padding(.vertical, 7)
         .background(color.opacity(0.14))
         .clipShape(Capsule())
     }
 }
 
-private struct SectionHeader: View {
-    var title: String
-
-    init(_ title: String) {
-        self.title = title
-    }
-
-    var body: some View {
-        Text(title)
-            .font(.caption.weight(.bold))
-            .foregroundStyle(.secondary)
-            .textCase(.uppercase)
-    }
-}
-
-private struct SampleChip: View {
-    var text: String
-
-    var body: some View {
-        Text(text)
-            .font(.caption.weight(.semibold))
-            .padding(.horizontal, 10)
-            .padding(.vertical, 7)
-            .background(Color(.secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-private struct TabItem: View {
-    var systemName: String
-    var title: String
-    var isSelected: Bool
-
-    var body: some View {
-        VStack(spacing: 2) {
-            Image(systemName: systemName)
-                .font(.system(size: 17, weight: .medium))
-            Text(title)
-                .font(.caption2.weight(.semibold))
-        }
-        .foregroundStyle(isSelected ? Color.appGreen : Color.secondary)
-        .frame(maxWidth: .infinity)
-        .frame(height: 44)
-        .background(isSelected ? Color.appGreen.opacity(0.12) : Color.clear)
-        .clipShape(RoundedRectangle(cornerRadius: 22))
-    }
-}
-
-private struct PrimaryButtonStyle: ButtonStyle {
+private struct ConfirmButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline.weight(.bold))
             .foregroundStyle(.white)
-            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity)
+            .frame(height: 52)
             .background(Color.appGreen.opacity(configuration.isPressed ? 0.82 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: 17))
+    }
+}
+
+private struct SecondaryButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.subheadline.weight(.bold))
+            .foregroundStyle(Color.primary)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 13)
+            .background(Color.settingsButtonBackground.opacity(configuration.isPressed ? 0.7 : 1))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 
 private extension View {
     func cardStyle() -> some View {
-        padding(16)
-            .background(Color.cardBackground)
+        padding(18)
+            .background(Color.cardBackground.opacity(0.78))
             .overlay {
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 26)
                     .stroke(Color.appBorder, lineWidth: 1)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: 26))
     }
 }
 
@@ -467,5 +387,4 @@ private extension Color {
             : UIColor(red: 0.84, green: 0.87, blue: 0.84, alpha: 1)
     })
     static let appGreen = Color(red: 0.18, green: 0.49, blue: 0.41)
-    static let appAmber = Color(red: 0.71, green: 0.42, blue: 0.09)
 }
