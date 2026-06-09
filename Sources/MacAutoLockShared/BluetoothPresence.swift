@@ -55,3 +55,22 @@ public struct BluetoothPresenceEvent: Equatable, Sendable {
         self.timestamp = timestamp
     }
 }
+
+public enum PairingCodeValidator {
+    public static let requiredLength = 4
+
+    public static func normalized(_ value: String) -> String? {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.count == requiredLength else { return nil }
+        guard trimmed.allSatisfy(\.isNumber) else { return nil }
+        return trimmed
+    }
+
+    public static func digitsOnlyPrefix(_ value: String) -> String {
+        String(value.filter(\.isNumber).prefix(requiredLength))
+    }
+
+    public static func generate() -> String {
+        String(format: "%04d", Int.random(in: 0...9_999))
+    }
+}

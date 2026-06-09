@@ -22,7 +22,7 @@ func commandCodecRoundTripsEnvelope() throws {
                 isTrusted: true
             ),
             rule: AutoLockRule(),
-            pairingCode: "123456"
+            pairingCode: "1234"
         )
     )
 
