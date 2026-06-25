@@ -21,20 +21,27 @@ struct iOSContentView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    headerBlock
-                    if model.isEnabled {
-                        enabledCard
-                    } else {
-                        pairingCard
+            GeometryReader { proxy in
+                let metrics = iPhoneLayoutMetrics(width: proxy.size.width, safeAreaInsets: proxy.safeAreaInsets)
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: metrics.sectionSpacing) {
+                        headerBlock(metrics)
+                        if model.isEnabled {
+                            enabledCard(metrics)
+                        } else {
+                            pairingCard(metrics)
+                        }
                     }
+                    .frame(maxWidth: metrics.contentMaxWidth, alignment: .leading)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, metrics.horizontalPadding)
+                    .padding(.top, metrics.topPadding)
+                    .padding(.bottom, metrics.bottomPadding)
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 52)
-                .padding(.bottom, 34)
+                .scrollIndicators(.hidden)
+                .background(Color.appBackground.ignoresSafeArea())
             }
-            .background(Color.appBackground.ignoresSafeArea())
             .navigationTitle("")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -63,15 +70,15 @@ struct iOSContentView: View {
                 copy: copy
             )
             .preferredColorScheme(theme.colorScheme)
-            .presentationDetents([.height(310)])
+            .presentationDetents([.medium, .large])
         }
         .accessibilityLabel(copy.settings)
     }
 
-    private var headerBlock: some View {
+    private func headerBlock(_ metrics: iPhoneLayoutMetrics) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(copy.title)
-                .font(.system(size: 34, weight: .bold, design: .rounded))
+                .font(.system(size: metrics.titleFontSize, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
             Text(copy.subtitle)
@@ -81,8 +88,8 @@ struct iOSContentView: View {
         }
     }
 
-    private var pairingCard: some View {
-        VStack(alignment: .leading, spacing: 18) {
+    private func pairingCard(_ metrics: iPhoneLayoutMetrics) -> some View {
+        VStack(alignment: .leading, spacing: metrics.cardSpacing) {
             HStack(spacing: 14) {
                 RoundedIcon(systemName: "iphone", color: .appGreen)
                 VStack(alignment: .leading, spacing: 3) {
@@ -100,23 +107,18 @@ struct iOSContentView: View {
                 StatusPill(text: shortId, color: .appGreen)
             }
 
-            HStack(spacing: 10) {
-                PairingCodeBoxes(
-                    code: Binding(
-                        get: { model.pairingCode },
-                        set: { model.updatePairingCode($0) }
-                    ),
-                    digits: model.pairingCodeDigits,
-                    accessibilityLabel: copy.enterCode
-                )
-
-                Button(copy.confirmPairing) {
-                    model.confirmPairing()
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 10) {
+                    pairingCodeBoxes(metrics)
+                        .frame(minWidth: metrics.codeBoxesMinWidth)
+                    confirmPairingButton
+                        .frame(width: metrics.confirmButtonWidth)
                 }
-                .buttonStyle(ConfirmButtonStyle())
-                .disabled(!model.canConfirmPairing)
-                .opacity(model.canConfirmPairing ? 1 : 0.45)
-                .frame(width: 88)
+
+                VStack(spacing: 10) {
+                    pairingCodeBoxes(metrics)
+                    confirmPairingButton
+                }
             }
 
             Text(copy.pairingHint)
@@ -124,18 +126,20 @@ struct iOSContentView: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .cardStyle()
+        .cardStyle(padding: metrics.cardPadding, cornerRadius: metrics.cardCornerRadius)
     }
 
-    private var enabledCard: some View {
-        VStack(spacing: 18) {
+    private func enabledCard(_ metrics: iPhoneLayoutMetrics) -> some View {
+        VStack(spacing: metrics.cardSpacing) {
             RoundedIcon(systemName: "checkmark.shield.fill", color: .appGreen)
                 .frame(maxWidth: .infinity)
 
             VStack(spacing: 8) {
                 Text(copy.enabledTitle)
-                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                    .font(.system(size: metrics.enabledTitleFontSize, weight: .bold, design: .rounded))
                     .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
                 Text(copy.enabledSubtitle)
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
@@ -143,20 +147,56 @@ struct iOSContentView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            HStack(spacing: 10) {
-                Button(copy.testLock) {
-                    model.lockNow()
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 10) {
+                    enabledActions
                 }
-                .buttonStyle(SecondaryButtonStyle())
 
-                Button(copy.rePair) {
-                    model.updatePairingCode("")
+                VStack(spacing: 10) {
+                    enabledActions
                 }
-                .buttonStyle(SecondaryButtonStyle())
             }
         }
         .padding(.vertical, 8)
-        .cardStyle()
+        .cardStyle(padding: metrics.cardPadding, cornerRadius: metrics.cardCornerRadius)
+    }
+
+    private func pairingCodeBoxes(_ metrics: iPhoneLayoutMetrics) -> some View {
+        PairingCodeBoxes(
+            code: Binding(
+                get: { model.pairingCode },
+                set: { model.updatePairingCode($0) }
+            ),
+            digits: model.pairingCodeDigits,
+            accessibilityLabel: copy.enterCode,
+            boxHeight: metrics.codeBoxHeight,
+            boxSpacing: metrics.codeBoxSpacing,
+            fontSize: metrics.codeFontSize,
+            cornerRadius: metrics.codeBoxCornerRadius
+        )
+    }
+
+    private var confirmPairingButton: some View {
+        Button(copy.confirmPairing) {
+            model.confirmPairing()
+        }
+        .buttonStyle(ConfirmButtonStyle(height: 52))
+        .disabled(!model.canConfirmPairing)
+        .opacity(model.canConfirmPairing ? 1 : 0.45)
+    }
+
+    private var enabledActions: some View {
+        Group {
+            Button(copy.testLock) {
+                model.lockNow()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+
+            Button(copy.rePair) {
+                model.updatePairingCode("")
+            }
+            .buttonStyle(SecondaryButtonStyle())
+        }
     }
 
     private var shortId: String {
@@ -184,6 +224,31 @@ private enum ThemePreference: String {
             .dark
         }
     }
+}
+
+private struct iPhoneLayoutMetrics {
+    let width: CGFloat
+    let safeAreaInsets: EdgeInsets
+
+    var isNarrow: Bool { width < 390 }
+    var isWide: Bool { width >= 428 }
+
+    var contentMaxWidth: CGFloat { isWide ? 440 : .infinity }
+    var horizontalPadding: CGFloat { isNarrow ? 18 : 24 }
+    var topPadding: CGFloat { max(24, safeAreaInsets.top + (isNarrow ? 18 : 28)) }
+    var bottomPadding: CGFloat { max(30, safeAreaInsets.bottom + 24) }
+    var sectionSpacing: CGFloat { isNarrow ? 18 : 24 }
+    var cardPadding: CGFloat { isNarrow ? 16 : 18 }
+    var cardSpacing: CGFloat { isNarrow ? 14 : 18 }
+    var cardCornerRadius: CGFloat { isNarrow ? 22 : 26 }
+    var titleFontSize: CGFloat { isNarrow ? 30 : 34 }
+    var enabledTitleFontSize: CGFloat { isNarrow ? 34 : 40 }
+    var confirmButtonWidth: CGFloat { isNarrow ? 82 : 92 }
+    var codeBoxesMinWidth: CGFloat { isNarrow ? 214 : 224 }
+    var codeBoxHeight: CGFloat { isNarrow ? 48 : 52 }
+    var codeBoxSpacing: CGFloat { isNarrow ? 6 : 8 }
+    var codeFontSize: CGFloat { isNarrow ? 20 : 22 }
+    var codeBoxCornerRadius: CGFloat { isNarrow ? 14 : 16 }
 }
 
 private struct iOSCopy {
@@ -265,21 +330,25 @@ private struct PairingCodeBoxes: View {
     @Binding var code: String
     var digits: [String]
     var accessibilityLabel: String
+    var boxHeight: CGFloat
+    var boxSpacing: CGFloat
+    var fontSize: CGFloat
+    var cornerRadius: CGFloat
 
     var body: some View {
         ZStack {
-            HStack(spacing: 8) {
+            HStack(spacing: boxSpacing) {
                 ForEach(0..<PairingCodeValidator.requiredLength, id: \.self) { index in
                     Text(digits[index].isEmpty ? " " : digits[index])
-                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .font(.system(size: fontSize, weight: .bold, design: .rounded))
                         .frame(maxWidth: .infinity)
-                        .frame(height: 52)
+                        .frame(height: boxHeight)
                         .background(Color.cardBackground)
                         .overlay {
-                            RoundedRectangle(cornerRadius: 16)
+                            RoundedRectangle(cornerRadius: cornerRadius)
                                 .stroke(digits[index].isEmpty ? Color.appBorder : Color.appGreen, lineWidth: 1)
                         }
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                 }
             }
 
@@ -330,12 +399,14 @@ private struct StatusPill: View {
 }
 
 private struct ConfirmButtonStyle: ButtonStyle {
+    var height: CGFloat
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline.weight(.bold))
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .frame(height: 52)
+            .frame(height: height)
             .background(Color.appGreen.opacity(configuration.isPressed ? 0.82 : 1))
             .clipShape(RoundedRectangle(cornerRadius: 17))
     }
@@ -354,14 +425,14 @@ private struct SecondaryButtonStyle: ButtonStyle {
 }
 
 private extension View {
-    func cardStyle() -> some View {
-        padding(18)
+    func cardStyle(padding: CGFloat = 18, cornerRadius: CGFloat = 26) -> some View {
+        self.padding(padding)
             .background(Color.cardBackground.opacity(0.78))
             .overlay {
-                RoundedRectangle(cornerRadius: 26)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(Color.appBorder, lineWidth: 1)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 26))
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
     }
 }
 
