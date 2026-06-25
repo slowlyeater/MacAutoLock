@@ -10,7 +10,7 @@ final class MacAppModel: ObservableObject {
     @Published var peers: [PeerState] = []
     @Published var rule = AutoLockRule()
     @Published var logLines: [String] = []
-    @Published var pairingCode = "123456"
+    @Published var pairingCode = PairingCodeValidator.generate()
     @Published var bluetoothStatus = "Bluetooth starting"
     @Published var lastBluetoothRSSI: Int?
     @Published var autoLockStatus = "Waiting for trusted iPhone."
@@ -23,6 +23,7 @@ final class MacAppModel: ObservableObject {
     private let deviceId = DeviceIdentity.loadOrCreate()
     private var trustedDeviceIds: Set<UUID> = []
     private var handledLockRequests: Set<UUID> = []
+    private var rssiSmoothers: [UUID: RSSISmoother] = [:]
     private var didAutoLockForCurrentAway = false
 
     func start() {
@@ -61,7 +62,7 @@ final class MacAppModel: ObservableObject {
     }
 
     func regeneratePairingCode() {
-        pairingCode = PairingCode.generate()
+        pairingCode = PairingCodeValidator.generate()
         appendLog("Pairing code refreshed.")
     }
 
@@ -132,13 +133,17 @@ final class MacAppModel: ObservableObject {
     }
 
     private func handleBluetoothPresence(_ event: BluetoothPresenceEvent) {
-        lastBluetoothRSSI = event.rssi
-        let isNearby = event.rssi >= rule.minimumNearbyRSSI
+        var smoother = rssiSmoothers[event.deviceId] ?? RSSISmoother()
+        let smoothedRSSI = smoother.addSample(event.rssi)
+        rssiSmoothers[event.deviceId] = smoother
+
+        lastBluetoothRSSI = smoothedRSSI
+        let isNearby = smoothedRSSI >= rule.minimumNearbyRSSI
         let previousNearbyHeartbeat = peers.first(where: { $0.id == event.deviceId })?.lastNearbyHeartbeat
         let nearbyHeartbeat = isNearby ? event.timestamp : previousNearbyHeartbeat
 
         if trustedDeviceIds.contains(event.deviceId) == false {
-            guard event.pairingCode == pairingCode else {
+            guard event.pairingCode == PairingCodeValidator.normalized(pairingCode) else {
                 bluetoothStatus = "Nearby unpaired \(event.role.rawValue)"
                 upsertPeer(
                     PeerState(
@@ -147,7 +152,7 @@ final class MacAppModel: ObservableObject {
                         role: event.role,
                         lastHeartbeat: event.timestamp,
                         lastNearbyHeartbeat: nearbyHeartbeat,
-                        lastRSSI: event.rssi,
+                        lastRSSI: smoothedRSSI,
                         isConnected: isNearby,
                         isTrusted: false
                     )
@@ -157,7 +162,7 @@ final class MacAppModel: ObservableObject {
 
             trustedDeviceIds.insert(event.deviceId)
             trustedStore.save(trustedDeviceIds)
-            pairingCode = "123456"
+            regeneratePairingCode()
             appendLog("Bluetooth pairing accepted for \(event.deviceName).")
         }
 
@@ -167,12 +172,12 @@ final class MacAppModel: ObservableObject {
             role: event.role,
             lastHeartbeat: event.timestamp,
             lastNearbyHeartbeat: nearbyHeartbeat,
-            lastRSSI: event.rssi,
+            lastRSSI: smoothedRSSI,
             isConnected: isNearby,
             isTrusted: true
         )
         upsertPeer(peer)
-        bluetoothStatus = isNearby ? "Bluetooth nearby, RSSI \(event.rssi)" : "Bluetooth weak, RSSI \(event.rssi)"
+        bluetoothStatus = isNearby ? "Bluetooth nearby, RSSI \(smoothedRSSI)" : "Bluetooth weak, RSSI \(smoothedRSSI)"
         updateAutoLockState(now: event.timestamp)
 
         if let lockRequestId = event.lockRequestId,
@@ -195,11 +200,5 @@ final class MacAppModel: ObservableObject {
         let stamp = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
         logLines.insert("[\(stamp)] \(line)", at: 0)
         logLines = Array(logLines.prefix(8))
-    }
-}
-
-private enum PairingCode {
-    static func generate() -> String {
-        String(format: "%06d", Int.random(in: 0...999_999))
     }
 }

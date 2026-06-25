@@ -21,6 +21,8 @@
 		20B42BB24EE47C9A4F59A9F4 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
 		277ADC2E72E9EC5FA3EA2B47 /* iOSBluetoothAdvertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D82B7254D5E445DD964537 /* iOSBluetoothAdvertiser.swift */; };
 		2A9F7365DE4867429C11567E /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		326B74188014E2D7EB5550BA /* RSSISmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9627F36641B2B570DD145C7C /* RSSISmoother.swift */; };
+		3F6820ACC479B9293190BC1B /* RSSISmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9627F36641B2B570DD145C7C /* RSSISmoother.swift */; };
 		45EEF8E5AA3492BA07A78CC3 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
 		47C4A2DE0C87D338A8C2269A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
 		47EF770FE3A5E1D1693EF74A /* MacAutoLockWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD16422F837B5DD73D286C9 /* MacAutoLockWatchApp.swift */; };
@@ -31,10 +33,12 @@
 		670C7F7CFBB93C9D57C47FA2 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
 		6A42CF74FAF2C9A71691F594 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A8EB6EF35A26A2D25ECC1E /* WatchContentView.swift */; };
 		79CC8E2C3680156B19EF4E65 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
+		841AF00CE37E934FE015FDFD /* RSSISmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9627F36641B2B570DD145C7C /* RSSISmoother.swift */; };
 		891BFA487EFD78948D177858 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
 		9276D25E730560AA97652F33 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
 		95C6D5F0BCE684A8559E7683 /* TrustedDeviceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C1734D13B8CF7D5153ADE8 /* TrustedDeviceStore.swift */; };
 		A31552435929B87150249606 /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
+		A6E0C474E5621F737E5F8CEA /* RSSISmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9627F36641B2B570DD145C7C /* RSSISmoother.swift */; };
 		A9F284DF4F4964DDAB7183A0 /* MacAutoLockiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3D11BAADC7240C0EFF4D02 /* MacAutoLockiOSApp.swift */; };
 		AB1719FC56EF4038DB409AA2 /* MacBluetoothPresenceScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE5B413DD9C3BD77F80D9BB /* MacBluetoothPresenceScanner.swift */; };
 		B90CCB3ACA102D91AAA95530 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FE60BF6B59EFB3A8DD6269F /* Assets.xcassets */; };
@@ -47,6 +51,8 @@
 		CB7F307F86C50196C7560CC3 /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
 		CE4E1DF553D705A2A373FC24 /* ControlCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B13BFFA5F311F39A398176 /* ControlCommand.swift */; };
 		D570800D7A38751134814B2C /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
+		D6A9C86FF66ED03B68BBE0E4 /* RSSISmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9627F36641B2B570DD145C7C /* RSSISmoother.swift */; };
+		D738957F58A8F5EDE32D685D /* RSSISmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9627F36641B2B570DD145C7C /* RSSISmoother.swift */; };
 		E07743DAE3817271DEB12F97 /* BluetoothPresence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C879530E82E7353B1DB68F9E /* BluetoothPresence.swift */; };
 		EE6F50E7E243252CDDF5B1C9 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A04E8F11CE596117F3F907 /* Models.swift */; };
 		F0412930AA2F5B3D9D5B6B80 /* CommandCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372FED640359EC1A0A03286C /* CommandCodec.swift */; };
@@ -58,22 +64,23 @@
 
 /* Begin PBXFileReference section */
 		01EB20BCDFBD15C3CAAF0726 /* MacAutoLockMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAutoLockMacApp.swift; sourceTree = "<group>"; };
-		09B0CCC7EF015042752B4A2F /* MacAutoLockiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacAutoLockiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		09B0CCC7EF015042752B4A2F /* Mac AutoLock.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Mac AutoLock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FE60BF6B59EFB3A8DD6269F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		224D06112F84FD9F414909EE /* MacMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMenuView.swift; sourceTree = "<group>"; };
 		24A8EB6EF35A26A2D25ECC1E /* WatchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchContentView.swift; sourceTree = "<group>"; };
 		28AF02A9B2AF46ADFA6AA1F7 /* AutoLockEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockEngine.swift; sourceTree = "<group>"; };
 		2C399AA676533E1CAD6EFDE6 /* DeviceIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentity.swift; sourceTree = "<group>"; };
 		30A04E8F11CE596117F3F907 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		36324D0FFD975F443D18B19A /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MacAutoLockShared.framework; path = MacAutoLockSharedWatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		36324D0FFD975F443D18B19A /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MacAutoLockShared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		372FED640359EC1A0A03286C /* CommandCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCodec.swift; sourceTree = "<group>"; };
-		3D9AA5D6282BC6E0B3A429B3 /* Mac AutoLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Mac AutoLock.app"; path = MacAutoLockMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D9AA5D6282BC6E0B3A429B3 /* Mac AutoLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac AutoLock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA6036CC8C6D64D4D94B421 /* iOSContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSContentView.swift; sourceTree = "<group>"; };
-		5098B13C5DBD068BF0D8E87F /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MacAutoLockShared.framework; path = MacAutoLockSharediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5098B13C5DBD068BF0D8E87F /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MacAutoLockShared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		71C1734D13B8CF7D5153ADE8 /* TrustedDeviceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustedDeviceStore.swift; sourceTree = "<group>"; };
 		8F5DF04E5171F899E093DE49 /* iOSWatchRelay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSWatchRelay.swift; sourceTree = "<group>"; };
 		90D82B7254D5E445DD964537 /* iOSBluetoothAdvertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSBluetoothAdvertiser.swift; sourceTree = "<group>"; };
-		97E40E670EB9ACB71DAC6DD4 /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MacAutoLockShared.framework; path = MacAutoLockSharedMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9627F36641B2B570DD145C7C /* RSSISmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSISmoother.swift; sourceTree = "<group>"; };
+		97E40E670EB9ACB71DAC6DD4 /* MacAutoLockShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MacAutoLockShared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		999A62D69F5F4D09FDE6B875 /* MacLockController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLockController.swift; sourceTree = "<group>"; };
 		9BE5B413DD9C3BD77F80D9BB /* MacBluetoothPresenceScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBluetoothPresenceScanner.swift; sourceTree = "<group>"; };
 		B82F7EB90271E6E8DA696A93 /* DeviceIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentity.swift; sourceTree = "<group>"; };
@@ -84,7 +91,7 @@
 		DB545C5C84B79C896A3DE842 /* MacAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppModel.swift; sourceTree = "<group>"; };
 		E4B13BFFA5F311F39A398176 /* ControlCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCommand.swift; sourceTree = "<group>"; };
 		E8317EE9B86D41B3559F375B /* iOSAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSAppModel.swift; sourceTree = "<group>"; };
-		FFE2C6AF554AF55CA1B2326D /* Mac AutoLock Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Mac AutoLock Watch.app"; path = MacAutoLockWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFE2C6AF554AF55CA1B2326D /* Mac AutoLock Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac AutoLock Watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -93,7 +100,7 @@
 			children = (
 				FFE2C6AF554AF55CA1B2326D /* Mac AutoLock Watch.app */,
 				3D9AA5D6282BC6E0B3A429B3 /* Mac AutoLock.app */,
-				09B0CCC7EF015042752B4A2F /* MacAutoLockiOS.app */,
+				09B0CCC7EF015042752B4A2F /* Mac AutoLock.app */,
 				97E40E670EB9ACB71DAC6DD4 /* MacAutoLockShared.framework */,
 				36324D0FFD975F443D18B19A /* MacAutoLockShared.framework */,
 				5098B13C5DBD068BF0D8E87F /* MacAutoLockShared.framework */,
@@ -120,6 +127,7 @@
 				372FED640359EC1A0A03286C /* CommandCodec.swift */,
 				E4B13BFFA5F311F39A398176 /* ControlCommand.swift */,
 				30A04E8F11CE596117F3F907 /* Models.swift */,
+				9627F36641B2B570DD145C7C /* RSSISmoother.swift */,
 			);
 			name = MacAutoLockShared;
 			path = Sources/MacAutoLockShared;
@@ -235,7 +243,7 @@
 			packageProductDependencies = (
 			);
 			productName = MacAutoLockiOS;
-			productReference = 09B0CCC7EF015042752B4A2F /* MacAutoLockiOS.app */;
+			productReference = 09B0CCC7EF015042752B4A2F /* Mac AutoLock.app */;
 			productType = "com.apple.product-type.application";
 		};
 		AEA70031E806F22FC2E25D7D /* MacAutoLockWatch */ = {
@@ -291,6 +299,7 @@
 						ProvisioningStyle = Automatic;
 					};
 					7312B2E13C9F38F5F775DD24 = {
+						DevelopmentTeam = 5F4857X59F;
 						ProvisioningStyle = Automatic;
 					};
 					AEA70031E806F22FC2E25D7D = {
@@ -348,6 +357,7 @@
 				BE5054D9BDB1EB7AA1551C6A /* DeviceIdentity.swift in Sources */,
 				A9F284DF4F4964DDAB7183A0 /* MacAutoLockiOSApp.swift in Sources */,
 				665B31F8A0F6128D04FB52FF /* Models.swift in Sources */,
+				A6E0C474E5621F737E5F8CEA /* RSSISmoother.swift in Sources */,
 				F2354638535BA57CEAF58403 /* iOSAppModel.swift in Sources */,
 				277ADC2E72E9EC5FA3EA2B47 /* iOSBluetoothAdvertiser.swift in Sources */,
 				61C6196D467036C665C9FD41 /* iOSContentView.swift in Sources */,
@@ -364,6 +374,7 @@
 				2A9F7365DE4867429C11567E /* CommandCodec.swift in Sources */,
 				670C7F7CFBB93C9D57C47FA2 /* ControlCommand.swift in Sources */,
 				D570800D7A38751134814B2C /* Models.swift in Sources */,
+				D6A9C86FF66ED03B68BBE0E4 /* RSSISmoother.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +387,7 @@
 				F0412930AA2F5B3D9D5B6B80 /* CommandCodec.swift in Sources */,
 				505C606E21056D52F88A89D3 /* ControlCommand.swift in Sources */,
 				01452A151C9DF2E2FF79D9E5 /* Models.swift in Sources */,
+				D738957F58A8F5EDE32D685D /* RSSISmoother.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,6 +401,7 @@
 				79CC8E2C3680156B19EF4E65 /* ControlCommand.swift in Sources */,
 				47EF770FE3A5E1D1693EF74A /* MacAutoLockWatchApp.swift in Sources */,
 				47C4A2DE0C87D338A8C2269A /* Models.swift in Sources */,
+				841AF00CE37E934FE015FDFD /* RSSISmoother.swift in Sources */,
 				5E4DA3C977EFE4C168235B97 /* WatchAppModel.swift in Sources */,
 				6A42CF74FAF2C9A71691F594 /* WatchContentView.swift in Sources */,
 			);
@@ -403,6 +416,7 @@
 				CB7F307F86C50196C7560CC3 /* CommandCodec.swift in Sources */,
 				45EEF8E5AA3492BA07A78CC3 /* ControlCommand.swift in Sources */,
 				BF76E41FCB3AB9B98B207BB3 /* Models.swift in Sources */,
+				3F6820ACC479B9293190BC1B /* RSSISmoother.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +435,7 @@
 				0017481EA7BC403BBB00E81E /* MacLockController.swift in Sources */,
 				BBD116A4F2592FA96A6AF084 /* MacMenuView.swift in Sources */,
 				EE6F50E7E243252CDDF5B1C9 /* Models.swift in Sources */,
+				326B74188014E2D7EB5550BA /* RSSISmoother.swift in Sources */,
 				95C6D5F0BCE684A8559E7683 /* TrustedDeviceStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
