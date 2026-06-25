@@ -23,16 +23,18 @@ struct MacMenuView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 14) {
             header
-            trustedDeviceCard
+            primaryStatusCard
             thresholdCard
-            controlsCard
-            discoveredDevicesCard
-            decisionCard
+            actionRow
+            if trustedPeers.isEmpty {
+                pairingCodeCard
+                discoveredDevicesCard
+            }
         }
         .padding(18)
-        .frame(width: 390)
+        .frame(width: 420)
         .background(Color.darkPanel)
         .preferredColorScheme(theme.colorScheme)
     }
@@ -49,7 +51,6 @@ struct MacMenuView: View {
                     .foregroundStyle(Color.darkMuted)
             }
             Spacer()
-            StatusPill(text: proximityStatus.title(copy: copy), color: proximityStatus.color)
             settingsButton
         }
     }
@@ -99,6 +100,35 @@ struct MacMenuView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
         }
+    }
+
+    private var primaryStatusCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
+                RoundedIcon(systemName: trustedPeers.isEmpty ? "iphone.slash" : "iphone.radiowaves.left.and.right", color: proximityStatus.color)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(primaryTitle)
+                        .font(.title3.weight(.bold))
+                        .foregroundStyle(Color.darkText)
+                    Text(model.autoLockStatus)
+                        .font(.caption)
+                        .foregroundStyle(Color.darkMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer()
+                StatusPill(text: proximityStatus.title(copy: copy), color: proximityStatus.color)
+            }
+
+            if let peer = trustedPeers.first {
+                HStack {
+                    SettingRow(label: copy.trustedIPhone, value: peer.deviceName, color: .darkText)
+                    Divider()
+                        .frame(height: 18)
+                    SettingRow(label: "RSSI", value: peer.lastRSSI.map { "\($0) dBm" } ?? "-- dBm", color: proximityStatus.color)
+                }
+            }
+        }
+        .panelCard()
     }
 
     private var thresholdCard: some View {
@@ -164,6 +194,52 @@ struct MacMenuView: View {
         .panelCard()
     }
 
+    private var actionRow: some View {
+        HStack(spacing: 10) {
+            Toggle(copy.enableAutoLock, isOn: Binding(
+                get: { model.rule.isAutoLockEnabled },
+                set: { _ in model.toggleAutoLock() }
+            ))
+            .toggleStyle(.switch)
+            .foregroundStyle(Color.darkText)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Button {
+                model.lockNow()
+            } label: {
+                Label(copy.lockNow, systemImage: "lock.fill")
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding(14)
+        .background(Color.darkCard)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+
+    private var pairingCodeCard: some View {
+        HStack(alignment: .center, spacing: 14) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(copy.pairingCode)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Color.darkMuted)
+                Text(model.pairingCode)
+                    .font(.system(size: 34, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(Color.darkText)
+            }
+            Spacer()
+            Button {
+                model.regeneratePairingCode()
+            } label: {
+                Image(systemName: "arrow.clockwise")
+                    .frame(width: 28, height: 28)
+            }
+            .buttonStyle(.bordered)
+            .help(copy.refreshPairingCode)
+        }
+        .panelCard()
+    }
+
     private var discoveredDevicesCard: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionHeader(copy.discoveredNearby)
@@ -213,6 +289,13 @@ struct MacMenuView: View {
 
     private var trustedPeers: [PeerState] {
         model.peers.filter(\.isTrusted)
+    }
+
+    private var primaryTitle: String {
+        guard let peer = trustedPeers.first else {
+            return copy.waitingForPairing
+        }
+        return peer.lastRSSI.map { $0 >= model.rule.minimumNearbyRSSI ? copy.autoLockReady : copy.lockingOnWeakSignal } ?? copy.autoLockReady
     }
 
     private var proximityStatus: ProximityStatus {
@@ -318,6 +401,10 @@ private struct MacCopy {
     var nearbyStatus: String { language == .chinese ? "附近" : "Nearby" }
     var weakStatus: String { language == .chinese ? "信号弱" : "Weak" }
     var unknownStatus: String { language == .chinese ? "未知" : "Unknown" }
+    var waitingForPairing: String { language == .chinese ? "等待配对 iPhone" : "Waiting for iPhone" }
+    var autoLockReady: String { language == .chinese ? "自动锁屏已就绪" : "Auto-Lock Ready" }
+    var lockingOnWeakSignal: String { language == .chinese ? "信号低于阈值" : "Below Threshold" }
+    var refreshPairingCode: String { language == .chinese ? "刷新配对码" : "Refresh pairing code" }
 }
 
 private struct SettingsPopover: View {
