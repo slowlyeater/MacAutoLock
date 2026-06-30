@@ -14,6 +14,8 @@ final class MacBluetoothPresenceScanner: NSObject, CBCentralManagerDelegate, CBP
     private let decoder = JSONDecoder()
     private var discoveredRSSI: [UUID: Int] = [:]
     private var peripherals: [UUID: CBPeripheral] = [:]
+    private var lastReadAttempt: [UUID: Date] = [:]
+    private let minimumReadInterval: TimeInterval = 1.5
 
     func start() {
         _ = central
@@ -43,7 +45,11 @@ final class MacBluetoothPresenceScanner: NSObject, CBCentralManagerDelegate, CBP
         advertisementData: [String: Any],
         rssi RSSI: NSNumber
     ) {
+        let now = Date()
         discoveredRSSI[peripheral.identifier] = RSSI.intValue
+        guard shouldRead(peripheral: peripheral, now: now) else { return }
+
+        lastReadAttempt[peripheral.identifier] = now
         peripherals[peripheral.identifier] = peripheral
         peripheral.delegate = self
         central.connect(peripheral)
@@ -99,6 +105,18 @@ final class MacBluetoothPresenceScanner: NSObject, CBCentralManagerDelegate, CBP
             onStatus?("Bluetooth device nearby")
         } catch {
             onStatus?("Bluetooth identity unreadable")
+        }
+    }
+
+    private func shouldRead(peripheral: CBPeripheral, now: Date) -> Bool {
+        switch peripheral.state {
+        case .connected, .connecting, .disconnecting:
+            return false
+        case .disconnected:
+            guard let lastAttempt = lastReadAttempt[peripheral.identifier] else { return true }
+            return now.timeIntervalSince(lastAttempt) >= minimumReadInterval
+        @unknown default:
+            return false
         }
     }
 }
