@@ -336,6 +336,8 @@ private struct PairingCodeBoxes: View {
     var fontSize: CGFloat
     var cornerRadius: CGFloat
 
+    @FocusState private var isCodeFieldFocused: Bool
+
     var body: some View {
         ZStack {
             HStack(spacing: boxSpacing) {
@@ -356,11 +358,19 @@ private struct PairingCodeBoxes: View {
             TextField("", text: $code)
                 .keyboardType(.numberPad)
                 .textContentType(.oneTimeCode)
+                .textFieldStyle(.plain)
                 .foregroundStyle(.clear)
                 .tint(.clear)
-                .background(Color.clear)
-                .opacity(0.01)
+                .focused($isCodeFieldFocused)
+                .frame(maxWidth: .infinity)
+                .frame(height: boxHeight)
+                .background(Color.clear.contentShape(Rectangle()))
+                .opacity(0.02)
                 .accessibilityLabel(accessibilityLabel)
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isCodeFieldFocused = true
         }
     }
 }
