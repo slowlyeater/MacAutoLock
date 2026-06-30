@@ -96,8 +96,11 @@ final class MacAppModel: ObservableObject {
 
         lockState = .locked
         appendLog(reason)
-        lockController.lockScreen()
-        appendLog("lock executed")
+        if lockController.lockScreen() {
+            appendLog("lock executed")
+        } else {
+            appendLog("lock failed: no lock strategy succeeded")
+        }
     }
 
     func regeneratePairingCode() {
