@@ -27,6 +27,9 @@ struct MacMenuView: View {
             VStack(alignment: .leading, spacing: 14) {
                 header
                 primaryStatusCard
+                if trustedPeers.isEmpty == false {
+                    trustedDeviceCard
+                }
                 thresholdCard
                 actionRow
                 debugControlsCard
@@ -94,10 +97,10 @@ struct MacMenuView: View {
                 DeviceRow(
                     name: peer.deviceName,
                     detail: peerDetail(peer),
-                    status: proximityStatus.title(copy: copy),
-                    statusColor: proximityStatus.color,
-                    actionTitle: nil,
-                    action: nil
+                    status: copy.untrust,
+                    statusColor: .orangeText,
+                    actionTitle: copy.untrust,
+                    action: { model.untrust(peer) }
                 )
             } else {
                 Text(copy.noTrustedDevice)
@@ -334,10 +337,10 @@ struct MacMenuView: View {
                     DeviceRow(
                         name: peer.deviceName,
                         detail: peerDetail(peer),
-                        status: peer.isTrusted ? copy.trusted : copy.trust,
-                        statusColor: peer.isTrusted ? .mintText : .darkText,
-                        actionTitle: peer.isTrusted ? nil : copy.trust,
-                        action: peer.isTrusted ? nil : { model.trust(peer) }
+                        status: peer.isTrusted ? copy.trusted : copy.waitingForCode,
+                        statusColor: peer.isTrusted ? .mintText : .darkMuted,
+                        actionTitle: peer.isTrusted ? copy.untrust : nil,
+                        action: peer.isTrusted ? { model.untrust(peer) } : nil
                     )
                 }
             }
@@ -461,7 +464,7 @@ private struct MacCopy {
     var unlockedSubtitle: String { language == .chinese ? "未锁定 · 等待可信 iPhone" : "Unlocked · waiting for trusted iPhone" }
     var lockedSubtitle: String { language == .chinese ? "已锁定" : "Locked" }
     var trustedIPhone: String { language == .chinese ? "可信 iPhone" : "Trusted iPhone" }
-    var noTrustedDevice: String { language == .chinese ? "先在附近设备里选择并信任你的 iPhone。" : "Choose and trust your iPhone from nearby devices first." }
+    var noTrustedDevice: String { language == .chinese ? "先在 iPhone 输入 Mac 配对码并确认。" : "Enter and confirm the Mac pairing code on iPhone first." }
     var distanceThreshold: String { language == .chinese ? "距离阈值" : "Distance threshold" }
     var near: String { language == .chinese ? "近 -45" : "near -45" }
     var lockBelow: String { language == .chinese ? "低于阈值锁屏" : "lock below threshold" }
@@ -486,6 +489,8 @@ private struct MacCopy {
     var scanning: String { language == .chinese ? "正在扫描附近 iPhone。" : "Scanning for nearby iPhone." }
     var trusted: String { language == .chinese ? "已信任" : "Trusted" }
     var trust: String { language == .chinese ? "信任" : "Trust" }
+    var untrust: String { language == .chinese ? "解除" : "Unpair" }
+    var waitingForCode: String { language == .chinese ? "等待配对码" : "Waiting for code" }
     var lastDecision: String { language == .chinese ? "上次判定" : "Last decision" }
     var pairingCode: String { language == .chinese ? "Mac 配对码" : "Mac pairing code" }
     var nearbyStatus: String { language == .chinese ? "附近" : "Nearby" }

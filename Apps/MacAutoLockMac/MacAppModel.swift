@@ -127,8 +127,8 @@ final class MacAppModel: ObservableObject {
         appendLog("dry run \(isEnabled ? "enabled" : "disabled")")
     }
 
-    func trust(_ peer: PeerState) {
-        trustedDeviceIds.insert(peer.id)
+    func untrust(_ peer: PeerState) {
+        trustedDeviceIds.remove(peer.id)
         trustedStore.save(trustedDeviceIds)
         upsertPeer(
             PeerState(
@@ -136,13 +136,19 @@ final class MacAppModel: ObservableObject {
                 deviceName: peer.deviceName,
                 role: peer.role,
                 lastHeartbeat: peer.lastHeartbeat ?? Date(),
-                lastNearbyHeartbeat: peer.isConnected ? Date() : peer.lastNearbyHeartbeat,
+                lastNearbyHeartbeat: peer.lastNearbyHeartbeat,
                 lastRSSI: peer.lastRSSI,
                 isConnected: peer.isConnected,
-                isTrusted: true
+                isTrusted: false
             )
         )
-        appendLog("Manually trusted \(peer.deviceName).")
+        if let index = debugDevices.firstIndex(where: { $0.id == peer.id }) {
+            debugDevices[index].isTrusted = false
+            debugDevices[index].status = "untrusted"
+        }
+        didAutoLockForCurrentAway = false
+        appendLog("Untrusted \(peer.deviceName).")
+        updateAutoLockState()
     }
 
     private func tick() {
