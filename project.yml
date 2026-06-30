@@ -66,6 +66,7 @@ targets:
       path: Config/MacAutoLockiOS-Info.plist
       properties:
         NSBluetoothAlwaysUsageDescription: Mac AutoLock advertises this iPhone over Bluetooth so your paired Mac can auto-lock when you leave.
+        UILaunchScreen: {}
         UIBackgroundModes:
           - bluetooth-peripheral
     settings:
