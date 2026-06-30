@@ -20,9 +20,12 @@ struct iOSContentView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            GeometryReader { proxy in
-                let metrics = iPhoneLayoutMetrics(width: proxy.size.width, safeAreaInsets: proxy.safeAreaInsets)
+        GeometryReader { proxy in
+            let metrics = iPhoneLayoutMetrics(width: proxy.size.width, safeAreaInsets: proxy.safeAreaInsets)
+
+            ZStack(alignment: .topTrailing) {
+                Color.appBackground
+                    .ignoresSafeArea()
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: metrics.sectionSpacing) {
@@ -40,13 +43,10 @@ struct iOSContentView: View {
                     .padding(.bottom, metrics.bottomPadding)
                 }
                 .scrollIndicators(.hidden)
-                .background(Color.appBackground.ignoresSafeArea())
-            }
-            .navigationTitle("")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    settingsButton
-                }
+
+                settingsButton
+                    .padding(.top, metrics.settingsTopPadding)
+                    .padding(.trailing, metrics.horizontalPadding)
             }
             .preferredColorScheme(theme.colorScheme)
         }
@@ -235,7 +235,8 @@ private struct iPhoneLayoutMetrics {
 
     var contentMaxWidth: CGFloat { isWide ? 440 : .infinity }
     var horizontalPadding: CGFloat { isNarrow ? 18 : 24 }
-    var topPadding: CGFloat { max(24, safeAreaInsets.top + (isNarrow ? 18 : 28)) }
+    var topPadding: CGFloat { max(68, safeAreaInsets.top + (isNarrow ? 12 : 16)) }
+    var settingsTopPadding: CGFloat { max(16, safeAreaInsets.top + 8) }
     var bottomPadding: CGFloat { max(30, safeAreaInsets.bottom + 24) }
     var sectionSpacing: CGFloat { isNarrow ? 18 : 24 }
     var cardPadding: CGFloat { isNarrow ? 16 : 18 }
