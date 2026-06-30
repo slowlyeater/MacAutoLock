@@ -23,18 +23,27 @@ struct MacMenuView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            header
-            primaryStatusCard
-            thresholdCard
-            actionRow
-            if trustedPeers.isEmpty {
-                pairingCodeCard
-                discoveredDevicesCard
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                header
+                primaryStatusCard
+                thresholdCard
+                actionRow
+                debugControlsCard
+                if model.isDebugMode {
+                    scanStatusCard
+                    debugDeviceListCard
+                    debugLogCard
+                }
+                if trustedPeers.isEmpty {
+                    pairingCodeCard
+                    discoveredDevicesCard
+                }
             }
+            .padding(18)
         }
-        .padding(18)
-        .frame(width: 420)
+        .frame(width: 520)
+        .frame(maxHeight: 720)
         .background(Color.darkPanel)
         .preferredColorScheme(theme.colorScheme)
     }
@@ -148,14 +157,15 @@ struct MacMenuView: View {
                 threshold: model.rule.minimumNearbyRSSI
             )
 
-            Slider(
-                value: Binding(
-                    get: { Double(model.rule.minimumNearbyRSSI) },
-                    set: { model.setMinimumNearbyRSSI(Int($0.rounded())) }
-                ),
-                in: -95 ... -45,
-                step: 1
-            )
+            Picker("", selection: Binding(
+                get: { model.rule.minimumNearbyRSSI },
+                set: { model.setMinimumNearbyRSSI($0) }
+            )) {
+                ForEach([-65, -70, -75, -80, -85, -90], id: \.self) { value in
+                    Text("\(value) dBm").tag(value)
+                }
+            }
+            .pickerStyle(.segmented)
 
             HStack {
                 Text(copy.near)
@@ -166,6 +176,78 @@ struct MacMenuView: View {
             }
             .font(.caption2)
             .foregroundStyle(Color.darkMuted)
+        }
+        .panelCard()
+    }
+
+    private var debugControlsCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(copy.debugMode)
+            Toggle(copy.debugMode, isOn: Binding(
+                get: { model.isDebugMode },
+                set: { model.setDebugMode($0) }
+            ))
+            .toggleStyle(.switch)
+            .foregroundStyle(Color.darkText)
+
+            Toggle(copy.dryRun, isOn: Binding(
+                get: { model.isDryRun },
+                set: { model.setDryRun($0) }
+            ))
+            .toggleStyle(.switch)
+            .foregroundStyle(Color.darkText)
+
+            SettingRow(
+                label: copy.autoLock,
+                value: model.rule.isAutoLockEnabled ? copy.on : copy.off,
+                color: model.rule.isAutoLockEnabled ? .mintText : .orangeText
+            )
+        }
+        .panelCard()
+    }
+
+    private var scanStatusCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            SectionHeader(copy.scanStatus)
+            SettingRow(label: copy.bluetoothState, value: model.bluetoothState, color: .darkText)
+            SettingRow(label: copy.scanningState, value: model.isScanning ? copy.on : copy.off, color: model.isScanning ? .mintText : .orangeText)
+            SettingRow(label: copy.lastScan, value: model.lastScanAt.map(timeAgo) ?? "--", color: .darkText)
+            SettingRow(label: copy.trustedCount, value: "\(trustedPeers.count)", color: .darkText)
+        }
+        .panelCard()
+    }
+
+    private var debugDeviceListCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(copy.recentIPhones)
+            if model.debugDevices.isEmpty {
+                Text(copy.scanning)
+                    .font(.caption)
+                    .foregroundStyle(Color.darkMuted)
+            } else {
+                ForEach(model.debugDevices) { device in
+                    DebugDeviceRow(device: device, lastSeenText: timeAgo(device.lastSeen))
+                }
+            }
+        }
+        .panelCard()
+    }
+
+    private var debugLogCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            SectionHeader(copy.debugLog)
+            if model.logLines.isEmpty {
+                Text("--")
+                    .font(.caption)
+                    .foregroundStyle(Color.darkMuted)
+            } else {
+                ForEach(Array(model.logLines.enumerated()), id: \.offset) { _, line in
+                    Text(line)
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(Color.darkText)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
         }
         .panelCard()
     }
@@ -313,6 +395,14 @@ struct MacMenuView: View {
         let shortId = peer.id.uuidString.prefix(4)
         return "\(shortId) · \(rssi)"
     }
+
+    private func timeAgo(_ date: Date) -> String {
+        let seconds = max(0, Int(Date().timeIntervalSince(date)))
+        if seconds < 60 { return "\(seconds)s ago" }
+        let minutes = seconds / 60
+        if minutes < 60 { return "\(minutes)m ago" }
+        return "\(minutes / 60)h ago"
+    }
 }
 
 private enum InterfaceLanguage: String {
@@ -405,6 +495,15 @@ private struct MacCopy {
     var autoLockReady: String { language == .chinese ? "自动锁屏已就绪" : "Auto-Lock Ready" }
     var lockingOnWeakSignal: String { language == .chinese ? "信号低于阈值" : "Below Threshold" }
     var refreshPairingCode: String { language == .chinese ? "刷新配对码" : "Refresh pairing code" }
+    var debugMode: String { language == .chinese ? "调试模式" : "Debug Mode" }
+    var dryRun: String { language == .chinese ? "Dry Run（不真实锁屏）" : "Dry Run (no real lock)" }
+    var scanStatus: String { language == .chinese ? "扫描状态" : "Scan Status" }
+    var bluetoothState: String { language == .chinese ? "Bluetooth state" : "Bluetooth state" }
+    var scanningState: String { language == .chinese ? "Scanning" : "Scanning" }
+    var lastScan: String { language == .chinese ? "最近扫描" : "Last scan" }
+    var trustedCount: String { language == .chinese ? "可信设备数量" : "Trusted devices" }
+    var recentIPhones: String { language == .chinese ? "最近发现的 iPhone" : "Recent iPhones" }
+    var debugLog: String { language == .chinese ? "BLE / Lock 日志" : "BLE / Lock Log" }
 }
 
 private struct SettingsPopover: View {
@@ -564,6 +663,80 @@ private struct DeviceRow: View {
                 .stroke(Color.darkBorder, lineWidth: 1)
         }
         .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+private struct DebugDeviceRow: View {
+    var device: MacDebugDeviceState
+    var lastSeenText: String
+
+    private var statusColor: Color {
+        switch device.status {
+        case "near":
+            .mintText
+        case "wouldLock":
+            .amberText
+        case "weak", "missing":
+            .orangeText
+        default:
+            .darkMuted
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 10) {
+                RoundedIcon(systemName: "iphone.radiowaves.left.and.right", color: statusColor)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(device.deviceName)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color.darkText)
+                    Text(device.shortDeviceId)
+                        .font(.caption2.monospaced())
+                        .foregroundStyle(Color.darkMuted)
+                }
+                Spacer()
+                StatusPill(text: device.status, color: statusColor)
+            }
+
+            Grid(alignment: .leading, horizontalSpacing: 14, verticalSpacing: 5) {
+                GridRow {
+                    DebugMetric(label: "raw", value: "\(device.rawRSSI)")
+                    DebugMetric(label: "smooth", value: "\(device.smoothedRSSI)")
+                    DebugMetric(label: "threshold", value: "\(device.threshold)")
+                }
+                GridRow {
+                    DebugMetric(label: "lastSeen", value: lastSeenText)
+                    DebugMetric(label: "trusted", value: device.isTrusted ? "true" : "false")
+                    DebugMetric(label: "state", value: device.status)
+                }
+            }
+        }
+        .padding(12)
+        .background(Color.darkCard)
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.darkBorder, lineWidth: 1)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+private struct DebugMetric: View {
+    var label: String
+    var value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(.caption2)
+                .foregroundStyle(Color.darkMuted)
+            Text(value)
+                .font(.caption.monospacedDigit().weight(.semibold))
+                .foregroundStyle(Color.darkText)
+                .lineLimit(1)
+        }
+        .frame(minWidth: 96, alignment: .leading)
     }
 }
 

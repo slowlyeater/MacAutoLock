@@ -12,19 +12,36 @@ final class MacAppModel: ObservableObject {
     @Published var logLines: [String] = []
     @Published var pairingCode = PairingCodeValidator.generate()
     @Published var bluetoothStatus = "Bluetooth starting"
+    @Published var bluetoothState = "unknown"
+    @Published var isScanning = false
+    @Published var lastScanAt: Date?
     @Published var lastBluetoothRSSI: Int?
     @Published var autoLockStatus = "Waiting for trusted iPhone."
+    @Published var isDebugMode = false
+    @Published var isDryRun = true
+    @Published var debugDevices: [MacDebugDeviceState] = []
 
     private let lockController = MacLockController()
     private let engine = AutoLockEngine()
     private let bluetoothScanner = MacBluetoothPresenceScanner()
     private let trustedStore = TrustedDeviceStore()
+    private let defaults = UserDefaults.standard
     private var timer: Timer?
     private let deviceId = DeviceIdentity.loadOrCreate()
     private var trustedDeviceIds: Set<UUID> = []
     private var handledLockRequests: Set<UUID> = []
     private var rssiSmoothers: [UUID: RSSISmoother] = [:]
     private var didAutoLockForCurrentAway = false
+    private let thresholdKey = "macAutoLock.rssiThreshold"
+    private let dryRunKey = "macAutoLock.dryRun"
+    private let debugModeKey = "macAutoLock.debugMode"
+
+    init() {
+        let savedThreshold = defaults.object(forKey: thresholdKey) as? Int
+        rule.minimumNearbyRSSI = savedThreshold ?? rule.minimumNearbyRSSI
+        isDryRun = defaults.object(forKey: dryRunKey) == nil ? true : defaults.bool(forKey: dryRunKey)
+        isDebugMode = defaults.object(forKey: debugModeKey) == nil ? false : defaults.bool(forKey: debugModeKey)
+    }
 
     func start() {
         guard timer == nil else { return }
@@ -40,8 +57,24 @@ final class MacAppModel: ObservableObject {
                 self?.bluetoothStatus = status
             }
         }
+        bluetoothScanner.onBluetoothState = { [weak self] state in
+            Task { @MainActor in
+                self?.bluetoothState = state
+            }
+        }
+        bluetoothScanner.onScanningChanged = { [weak self] isScanning in
+            Task { @MainActor in
+                self?.isScanning = isScanning
+                self?.appendLog(isScanning ? "scan started" : "scan stopped")
+            }
+        }
+        bluetoothScanner.onScanActivity = { [weak self] date in
+            Task { @MainActor in
+                self?.lastScanAt = date
+            }
+        }
         bluetoothScanner.start()
-        appendLog("Bluetooth scanner started.")
+        appendLog("Bluetooth scanner started")
 
         timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             Task { @MainActor in
@@ -56,9 +89,15 @@ final class MacAppModel: ObservableObject {
     }
 
     func lockNow(reason: String = "Manual lock requested.") {
-        appendLog(reason)
+        if isDryRun {
+            appendLog("would lock: \(reason)")
+            return
+        }
+
         lockState = .locked
+        appendLog(reason)
         lockController.lockScreen()
+        appendLog("lock executed")
     }
 
     func regeneratePairingCode() {
@@ -68,7 +107,21 @@ final class MacAppModel: ObservableObject {
 
     func setMinimumNearbyRSSI(_ value: Int) {
         rule.minimumNearbyRSSI = value
+        defaults.set(value, forKey: thresholdKey)
+        appendLog("threshold set to \(value)")
         updateAutoLockState()
+    }
+
+    func setDebugMode(_ isEnabled: Bool) {
+        isDebugMode = isEnabled
+        defaults.set(isEnabled, forKey: debugModeKey)
+        appendLog("debug mode \(isEnabled ? "enabled" : "disabled")")
+    }
+
+    func setDryRun(_ isEnabled: Bool) {
+        isDryRun = isEnabled
+        defaults.set(isEnabled, forKey: dryRunKey)
+        appendLog("dry run \(isEnabled ? "enabled" : "disabled")")
     }
 
     func trust(_ peer: PeerState) {
@@ -94,41 +147,30 @@ final class MacAppModel: ObservableObject {
     }
 
     private func updateAutoLockState(now: Date = Date()) {
-        guard rule.isAutoLockEnabled else {
-            autoLockStatus = "Auto lock is disabled."
-            return
-        }
+        let decision = engine.evaluate(rule: rule, trustedPeers: peers, now: now)
+        autoLockStatus = decision.reason
+        refreshDebugDeviceStatuses(now: now, decision: decision)
 
-        let trusted = peers.filter(\.isTrusted)
-        guard trusted.isEmpty == false else {
-            autoLockStatus = "Pair or trust an iPhone first."
-            return
-        }
-
-        let activeTrusted = trusted.filter { peer in
-            guard let lastHeartbeat = peer.lastHeartbeat else { return false }
-            return now.timeIntervalSince(lastHeartbeat) <= rule.offlineGraceSeconds
-        }
-
-        if let nearby = activeTrusted.first(where: { ($0.lastRSSI ?? -127) >= rule.minimumNearbyRSSI }) {
+        if decision.kind == .nearby {
             didAutoLockForCurrentAway = false
-            autoLockStatus = "\(nearby.deviceName) nearby, RSSI \(nearby.lastRSSI ?? 0) >= \(rule.minimumNearbyRSSI)."
-            return
         }
 
-        if let weak = activeTrusted.first {
-            autoLockStatus = "\(weak.deviceName) crossed threshold, RSSI \(weak.lastRSSI ?? 0) < \(rule.minimumNearbyRSSI)."
-            if didAutoLockForCurrentAway == false {
-                didAutoLockForCurrentAway = true
-                lockNow(reason: "Trusted iPhone crossed RSSI threshold: \(weak.lastRSSI ?? 0) < \(rule.minimumNearbyRSSI).")
+        guard decision.shouldLock, didAutoLockForCurrentAway == false else { return }
+        didAutoLockForCurrentAway = true
+
+        switch decision.kind {
+        case .weakRSSI:
+            let weakPeer = peers.first { peer in
+                peer.isTrusted
+                    && (peer.lastHeartbeat.map { now.timeIntervalSince($0) <= rule.offlineGraceSeconds } ?? false)
+                    && (peer.lastRSSI ?? -127) < rule.minimumNearbyRSSI
             }
-            return
-        }
-
-        autoLockStatus = "Trusted iPhone has not reported for \(Int(rule.offlineGraceSeconds))s."
-        if didAutoLockForCurrentAway == false {
-            didAutoLockForCurrentAway = true
-            lockNow(reason: "Trusted iPhone stopped reporting for \(Int(rule.offlineGraceSeconds))s.")
+            let rssi = weakPeer?.lastRSSI.map(String.init) ?? "unknown"
+            lockNow(reason: "weak RSSI for trusted iPhone: \(rssi) < \(rule.minimumNearbyRSSI)")
+        case .missing:
+            lockNow(reason: "trusted iPhone missing for \(Int(rule.offlineGraceSeconds))s")
+        default:
+            lockNow(reason: decision.reason)
         }
     }
 
@@ -157,6 +199,13 @@ final class MacAppModel: ObservableObject {
                         isTrusted: false
                     )
                 )
+                upsertDebugDevice(
+                    event: event,
+                    smoothedRSSI: smoothedRSSI,
+                    isTrusted: false,
+                    status: debugStatus(for: smoothedRSSI, isTrusted: false, now: event.timestamp, lastSeen: event.timestamp)
+                )
+                appendLog("\(event.deviceName) \(shortId(event.deviceId)) RSSI \(event.rssi) smooth \(smoothedRSSI) trusted false")
                 return
             }
 
@@ -177,6 +226,13 @@ final class MacAppModel: ObservableObject {
             isTrusted: true
         )
         upsertPeer(peer)
+        upsertDebugDevice(
+            event: event,
+            smoothedRSSI: smoothedRSSI,
+            isTrusted: true,
+            status: debugStatus(for: smoothedRSSI, isTrusted: true, now: event.timestamp, lastSeen: event.timestamp)
+        )
+        appendLog("\(event.deviceName) \(shortId(event.deviceId)) RSSI \(event.rssi) smooth \(smoothedRSSI) trusted true")
         bluetoothStatus = isNearby ? "Bluetooth nearby, RSSI \(smoothedRSSI)" : "Bluetooth weak, RSSI \(smoothedRSSI)"
         updateAutoLockState(now: event.timestamp)
 
@@ -198,7 +254,74 @@ final class MacAppModel: ObservableObject {
 
     private func appendLog(_ line: String) {
         let stamp = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
-        logLines.insert("[\(stamp)] \(line)", at: 0)
-        logLines = Array(logLines.prefix(8))
+        logLines.insert("\(stamp) \(line)", at: 0)
+        logLines = Array(logLines.prefix(30))
+    }
+
+    private func upsertDebugDevice(
+        event: BluetoothPresenceEvent,
+        smoothedRSSI: Int,
+        isTrusted: Bool,
+        status: String
+    ) {
+        let device = MacDebugDeviceState(
+            id: event.deviceId,
+            deviceName: event.deviceName,
+            rawRSSI: event.rssi,
+            smoothedRSSI: smoothedRSSI,
+            threshold: rule.minimumNearbyRSSI,
+            lastSeen: event.timestamp,
+            isTrusted: isTrusted,
+            status: status
+        )
+
+        if let index = debugDevices.firstIndex(where: { $0.id == event.deviceId }) {
+            debugDevices[index] = device
+        } else {
+            debugDevices.append(device)
+        }
+        debugDevices.sort { $0.lastSeen > $1.lastSeen }
+    }
+
+    private func refreshDebugDeviceStatuses(now: Date, decision: AutoLockDecision) {
+        debugDevices = debugDevices.map { device in
+            var next = device
+            next.threshold = rule.minimumNearbyRSSI
+            next.status = deviceStatus(device: device, now: now, decision: decision)
+            return next
+        }
+    }
+
+    private func deviceStatus(device: MacDebugDeviceState, now: Date, decision: AutoLockDecision) -> String {
+        guard device.isTrusted else { return "untrusted" }
+        guard now.timeIntervalSince(device.lastSeen) <= rule.offlineGraceSeconds else { return "missing" }
+        if device.smoothedRSSI >= rule.minimumNearbyRSSI { return "near" }
+        if decision.shouldLock { return isDryRun ? "wouldLock" : "weak" }
+        return "weak"
+    }
+
+    private func debugStatus(for smoothedRSSI: Int, isTrusted: Bool, now: Date, lastSeen: Date) -> String {
+        guard isTrusted else { return "untrusted" }
+        guard now.timeIntervalSince(lastSeen) <= rule.offlineGraceSeconds else { return "missing" }
+        return smoothedRSSI >= rule.minimumNearbyRSSI ? "near" : "weak"
+    }
+
+    private func shortId(_ id: UUID) -> String {
+        String(id.uuidString.prefix(6))
+    }
+}
+
+struct MacDebugDeviceState: Identifiable, Equatable {
+    var id: UUID
+    var deviceName: String
+    var rawRSSI: Int
+    var smoothedRSSI: Int
+    var threshold: Int
+    var lastSeen: Date
+    var isTrusted: Bool
+    var status: String
+
+    var shortDeviceId: String {
+        String(id.uuidString.prefix(6))
     }
 }

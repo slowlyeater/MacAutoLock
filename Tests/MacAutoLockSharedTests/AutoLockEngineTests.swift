@@ -124,3 +124,55 @@ func autoLockLocksForSmoothedWeakRSSI() {
 
     #expect(decision.shouldLock == true)
 }
+
+@Test
+func autoLockThresholdCanBeConfigured() {
+    let engine = AutoLockEngine()
+    let now = Date(timeIntervalSince1970: 100)
+    let peer = PeerState(
+        deviceName: "Eric iPhone",
+        role: .iphone,
+        lastHeartbeat: now,
+        lastNearbyHeartbeat: now,
+        lastRSSI: -72,
+        isConnected: true,
+        isTrusted: true
+    )
+
+    let strictDecision = engine.evaluate(
+        rule: AutoLockRule(offlineGraceSeconds: 45, minimumNearbyRSSI: -70),
+        trustedPeers: [peer],
+        now: now
+    )
+    let relaxedDecision = engine.evaluate(
+        rule: AutoLockRule(offlineGraceSeconds: 45, minimumNearbyRSSI: -75),
+        trustedPeers: [peer],
+        now: now
+    )
+
+    #expect(strictDecision.shouldLock == true)
+    #expect(strictDecision.kind == .weakRSSI)
+    #expect(relaxedDecision.shouldLock == false)
+    #expect(relaxedDecision.kind == .nearby)
+}
+
+@Test
+func weakRSSIProducesWouldLockDecisionKind() {
+    let engine = AutoLockEngine()
+    let now = Date(timeIntervalSince1970: 100)
+    let rule = AutoLockRule(offlineGraceSeconds: 45, minimumNearbyRSSI: -80)
+    let peer = PeerState(
+        deviceName: "Eric iPhone",
+        role: .iphone,
+        lastHeartbeat: now,
+        lastNearbyHeartbeat: now.addingTimeInterval(-20),
+        lastRSSI: -88,
+        isConnected: false,
+        isTrusted: true
+    )
+
+    let decision = engine.evaluate(rule: rule, trustedPeers: [peer], now: now)
+
+    #expect(decision.shouldLock == true)
+    #expect(decision.kind == .weakRSSI)
+}

@@ -7,6 +7,9 @@ import MacAutoLockShared
 final class MacBluetoothPresenceScanner: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var onPresence: ((BluetoothPresenceEvent) -> Void)?
     var onStatus: ((String) -> Void)?
+    var onBluetoothState: ((String) -> Void)?
+    var onScanningChanged: ((Bool) -> Void)?
+    var onScanActivity: ((Date) -> Void)?
 
     private lazy var central = CBCentralManager(delegate: self, queue: nil)
     private let serviceUUID = CBUUID(string: BluetoothPresence.serviceUUID)
@@ -24,17 +27,27 @@ final class MacBluetoothPresenceScanner: NSObject, CBCentralManagerDelegate, CBP
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
+            onBluetoothState?("poweredOn")
             onStatus?("Bluetooth scanning")
+            onScanningChanged?(true)
             central.scanForPeripherals(withServices: [serviceUUID], options: [
                 CBCentralManagerScanOptionAllowDuplicatesKey: true
             ])
         case .poweredOff:
+            onBluetoothState?("poweredOff")
+            onScanningChanged?(false)
             onStatus?("Bluetooth is off")
         case .unauthorized:
+            onBluetoothState?("unauthorized")
+            onScanningChanged?(false)
             onStatus?("Bluetooth permission denied")
         case .unsupported:
+            onBluetoothState?("unsupported")
+            onScanningChanged?(false)
             onStatus?("Bluetooth unsupported")
         default:
+            onBluetoothState?("unavailable")
+            onScanningChanged?(false)
             onStatus?("Bluetooth unavailable")
         }
     }
@@ -47,6 +60,7 @@ final class MacBluetoothPresenceScanner: NSObject, CBCentralManagerDelegate, CBP
     ) {
         let now = Date()
         discoveredRSSI[peripheral.identifier] = RSSI.intValue
+        onScanActivity?(now)
         guard shouldRead(peripheral: peripheral, now: now) else { return }
 
         lastReadAttempt[peripheral.identifier] = now
